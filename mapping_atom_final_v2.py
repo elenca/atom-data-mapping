@@ -82,7 +82,7 @@ def main():
     data.rename(columns={'THEMEN NAME (Stufe Kollektion)': 'Path', 'Titel Teilserie': 'Teilserie', 'Titel Akte': 'Akte', 'Titel': 'Objekt'}, inplace=True)
 
     # rename scopeAndContent columns
-    data.rename(columns={'BESCHREIBUNG (Stufe Kollektion)': 'scope_Serie', 'Merkmale der Sub-Dossiers': 'scope_Teilserie', 'Merkmale der Sub-Sub-Dossiers': 'scope_Akte', 'Beschreibung': 'scope_Objekt'}, inplace=True)
+    data.rename(columns={'BESCHREIBUNG (Stufe Kollektion)': 'scope_Serie', 'Merkmale Teilserie': 'scope_Teilserie', 'Merkmale der Akte': 'scope_Akte', 'Beschreibung': 'scope_Objekt'}, inplace=True)
 
     # create column for level "Bestand"
     data['Bestand'] = data['Path'].apply(split_column, number=(0))
@@ -117,8 +117,8 @@ def main():
 
     ### HierarchyPath
     data['hierarchyPath'] = "0_" + data['Bestand']
-    data['hierarchyPath'] = "/1_" + data['Teilbestand']
-    data['hierarchyPath'] = "/2_" + data['Serie']
+    data['hierarchyPath'] = data['hierarchyPath'] + "/1_" + data['Teilbestand']
+    data['hierarchyPath'] = data['hierarchyPath'] + "/2_" + data['Serie']
     data['hierarchyPath'].loc[data['Teilserie'].notnull() == True] = data['hierarchyPath'] + "/3_" + data['Teilserie']
     data['hierarchyPath'].loc[data['Akte'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Akte']
 
@@ -181,7 +181,7 @@ def main():
     # add values from fields "Blattmasse (H) in cm" and "Blattmasse (B) in cm" and  "Masse (T) in cm"
     # if not null add to extentAndMedium
     data['extent'] = data['Blattmasse (H) in cm']
-    data['extent'].loc[data['Masse (B) in cm'].notnull() == True] = data['extent'] + " x " + data['Masse (B) in cm'].astype(str)
+    data['extent'].loc[data['Blattmasse (B) in cm'].notnull() == True] = data['extent'] + " x " + data['Blattmasse (B) in cm'].astype(str)
     data['extent'].loc[data['Masse (T) in cm'].notnull() == True] = data['extent'] + " x " + data['Masse (T) in cm'].astype(str)
     data['extent'] = data['extentAndMedium'] + " cm"
 
@@ -355,14 +355,14 @@ def main():
         'identifier',
         'digitalObjectPath',
         #'placeAccessPoints',
-        #'radTitleProperOfPublishersSeries', #skip
+        #'radTitleProperOfPublishersSeries',
         #'status',
         'levelOfDescription',
         #'accessRestrictionIsPublic',
         'physicalCharacteristics',
         'subjectAccessPoints',
         'nameAccessPoints',
-        'radNoteGeneral',
+        #'radNoteGeneral',
         'radGeneralMaterialDesignation',
         'extentAndMedium',
         'eventTypes',
