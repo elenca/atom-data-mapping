@@ -100,6 +100,9 @@ def main():
     ### RadGeneralMaterialDesignation
     data['radGeneralMaterialDesignation'] = "Kinderzeichnung"
 
+    ### PublicationStatus
+    data['publicationStatus'] = data['Portal Publikation'].str.replace('NEIN', 'Entwurf')
+
     ### AlternativeIdentifiers
     data['alternativeIdentifiers'] = data['Ressourcen-ID(s)']
     data['alternativeIdentifiers'].loc[data['Kartei Heller'].notnull() == True] = data['alternativeIdentifiers'].astype(str) + "|" + data['Kartei Heller'].astype(str).replace({r'(.*)(.0)' : r'\1'}, regex=True)
@@ -113,6 +116,9 @@ def main():
     data['digitalObjectPath'] = data['Path']
     data['digitalObjectPath'].loc[data['Teilserie'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Teilserie']
     data['digitalObjectPath'].loc[data['Akte'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Akte']
+    data['digitalObjectP'] = data['digitalObjectPath']
+
+    ### add identifier
     data['digitalObjectPath'].loc[data['identifier'].notnull() == True] = data['digitalObjectPath'] + "/" + data['identifier']
 
     ### HierarchyPath
@@ -191,7 +197,7 @@ def main():
 
 
     ### Tags ###
-    data['scope_Objekt'].loc[data['Tag(s)'].notnull() == True] = data['scope_Objekt'] + "\nTags: " + data['Tag(s)']
+    data['scope_Objekt'].loc[data['Tag(s)'].notnull() == True] = data['scope_Objekt'] + "| Tags: " + data['Tag(s)']
 
     ### NameAccessPoints ###
     data['nameAccessPoints'] = data['Kanon'] + " (Kanon)"
@@ -249,7 +255,7 @@ def main():
     df_serie = df_sub.loc[df_sub['lod'] == '1Serie']
     df_serie['title'] = df_serie['Serie'].apply(set_value)
     df_serie['scopeAndContent'] = df_serie['scope_Serie'].apply(set_value)
-    df_serie['digitalObjectPath'] = df_serie['digitalObjectPath'].apply(set_value)
+    df_serie['digitalObjectPath'] = df_serie['digitalObjectP'].apply(set_value)
     df_serie['hierarchyPath'] = df_serie['hierarchyPath'].apply(set_value)
 
     # set the eventStartDates, eventEndDates and eventDates
@@ -270,8 +276,9 @@ def main():
     df_teilserie = df_sub.loc[df_sub['lod'] == '2Teilserie']
     df_teilserie['title'] = df_teilserie['Teilserie'].apply(set_value)
     df_teilserie['scopeAndContent'] = df_teilserie['scope_Teilserie'].apply(set_value)
-    df_teilserie['digitalObjectPath'] = df_teilserie['digitalObjectPath'].apply(set_value)
+    df_teilserie['digitalObjectPath'] = df_teilserie['digitalObjectP'].apply(set_value)
     df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPath'].apply(set_value)
+    df_teilserie['eventActors'] = df_teilserie['NORM Körperschaft'].apply(set_value)
     df_lod = df_lod.append(df_teilserie)
 
     # create a dataframe for the level "Akte" and append to "df_lod"
@@ -279,13 +286,13 @@ def main():
     df_akte = df_sub.loc[df_sub['lod'] == '3Akte']
     df_akte['title'] = df_akte['Akte'].apply(set_value)
     df_akte['scopeAndContent'] = df_akte['scope_Akte'].apply(set_value)
-    df_akte['digitalObjectPath'] = df_akte['digitalObjectPath'].apply(set_value)
+    df_akte['digitalObjectPath'] = df_akte['digitalObjectP'].apply(set_value)
     df_akte['hierarchyPath'] = df_akte['hierarchyPath'].apply(set_value)
     df_lod = df_lod.append(df_akte)
 
-    s1 = pd.Series(['0Bestand', 'IIJ'])
-    s2 = pd.Series(['0Teilbestand', 'Kinderzeichnungen Schweiz'])
-    df_bestand = pd.DataFrame([list(s1), list(s2)], columns =  ["lod", "title"], index=[0,0])
+    s1 = pd.Series(['0Bestand', 'IIJ', 'IIJ', '0_IIJ'])
+    s2 = pd.Series(['0Teilbestand', 'Kinderzeichnungen Schweiz', 'IIJ/Kinderzeichnungen Schweiz', '0_IIJ/1_Kinderzeichnungen Schweiz'])
+    df_bestand = pd.DataFrame([list(s1), list(s2)], columns =  ["lod", "title", 'digitalObjectPath', 'hierarchyPath'], index=[0,0])
     df_lod = df_lod.append(df_bestand)
 
     # final columns
@@ -293,6 +300,8 @@ def main():
         'lod',
         'title',
         'scopeAndContent',
+        'digitalObjectPath',
+        'hierarchyPath',
         'eventStartDates',
         'eventEndDates',
         'eventDates',
@@ -339,7 +348,7 @@ def main():
     # rename columns
     mydata.rename(columns={
         'lod': 'levelOfDescription',
-        'Ressourcen-ID(s)': 'alternativeIdentifiers',
+        #'Ressourcen-ID(s)': 'alternativeIdentifiers',
         #'Alternativer Titel': 'alternateTitle', #omitted
         'Notizen (intern)': 'radPublishersSeriesNote',
         'Zustand': 'physicalCharacteristics',
@@ -365,9 +374,10 @@ def main():
         #'radTitleContinues',
         'identifier',
         'digitalObjectPath',
-        #'placeAccessPoints',
+        'placeAccessPoints',
         #'radTitleProperOfPublishersSeries',
         #'status',
+        'publicationStatus',
         'levelOfDescription',
         #'accessRestrictionIsPublic',
         'physicalCharacteristics',
