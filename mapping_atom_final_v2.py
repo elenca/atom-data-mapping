@@ -3,6 +3,11 @@
 """
 # coding: utf-8
 
+### TODO:
+# add filename to digitalobjectpath
+# 
+
+
 import pandas as pd
 import numpy as np
 import random
@@ -60,13 +65,6 @@ def set_class(value):
     else:
         return value
 
-# function to set the values for findingAids
-def set_kartei_label(value, kartei):
-    if value is not np.nan:
-        return "Kartei " + kartei
-    else:
-        value
-
 
 def main():
     """Summary"""
@@ -95,16 +93,12 @@ def main():
     # create column for level "Serie"
     data['Serie'] = data['Path'].apply(split_column, number=(2))
 
-    # create path
-    data['digitalObjectPath'] = data['Path']
-    data['digitalObjectPath'].loc[data['Teilserie'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Teilserie']
-    data['digitalObjectPath'].loc[data['Akte'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Akte']
-
-
     ### Identifier
     # create column for identifier
     data['identifier'] = data['Original Dateiname / Signatur'].replace({r'(.*)(.tif|.tiff|.jpg|.pdf)' : r'\1'}, regex=True)
 
+    ### RadGeneralMaterialDesignation
+    data['radGeneralMaterialDesignation'] = "Kinderzeichnung"
 
     ### AlternativeIdentifiers
     data['alternativeIdentifiers'] = data['Ressourcen-ID(s)']
@@ -114,6 +108,19 @@ def main():
     data['alternativeIdentifierLabels'] = data['alternativeIdentifierLabels'].loc[data['Ressourcen-ID(s)'].notnull() == True] = "Ressourcen-ID"
     data['alternativeIdentifierLabels'].loc[data['Kartei Heller'].notnull() == True] = data['alternativeIdentifierLabels'] + "|" + "Kartei Heller"
     data['alternativeIdentifierLabels'].loc[data['Kartei Weidmann'].notnull() == True] = data['alternativeIdentifierLabels'] + "|" + "Kartei Weidmann"
+
+    ### DigitalObjectPath
+    data['digitalObjectPath'] = data['Path']
+    data['digitalObjectPath'].loc[data['Teilserie'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Teilserie']
+    data['digitalObjectPath'].loc[data['Akte'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Akte']
+    data['digitalObjectPath'].loc[data['identifier'].notnull() == True] = data['digitalObjectPath'] + "/" + data['identifier']
+
+    ### HierarchyPath
+    data['parentId'] = "0_" + data['Bestand']
+    data['parentId'] = "/1_" + data['Teilbestand']
+    data['parentId'] = "/2_" + data['Serie']
+    data['parentId'].loc[data['Teilserie'].notnull() == True] = data['parentId'] + "/3_" + data['Teilserie']
+    data['parentId'].loc[data['Akte'].notnull() == True] = data['parentId'] + "/4_" + data['Akte']
 
     ### Author
     # create new field "author_id"
@@ -166,14 +173,25 @@ def main():
     data['nameAccessPoints'].iloc[:12]
 
 
-    ### Create genreAccessPoints (Technik) ###
+    ### GenreAccessPoints (Technik) ###
     data['Technik'] = data['Technik'].str.replace(', ', '|')
     data['genreAccessPoints'] = data['Technik']
 
+    ### ExtentAndMedium ###
+    data['extentAndMedium'] = "Technik: " + data['Technik']
 
-    ### Create radGeneralMaterialDesignation (Trägermaterial) ###
+    ### add values from field Trägermaterial
     data['Trägermaterial'] = data['Trägermaterial'].str.replace(', ', '|')
-    data['radGeneralMaterialDesignation'] = data['Trägermaterial']
+    data['extentAndMedium'].loc[data['Trägermaterial'].notnull() == True] = data['extentAndMedium'] + "| Trägermaterial: " + data['Trägermaterial']
+
+    # add values from fields "Blattmasse (H) in cm" and "Blattmasse (B) in cm" and  "Masse (T) in cm"
+    # if not null add to extentAndMedium
+    data['extent'] = data['Blattmasse (H) in cm']
+    data['extent'].loc[data['Masse (B) in cm'].notnull() == True] = data['extent'] + " x " + data['Masse (B) in cm'].astype(str)
+    data['extent'].loc[data['Masse (T) in cm'].notnull() == True] = data['extent'] + " x " + data['Masse (T) in cm'].astype(str)
+    data['extent'] = data['extentAndMedium'] + " cm"
+
+    data['extentAndMedium'].loc[data['extent'].notnull() == True] = data['extentAndMedium'] + "| Masse: " + data['extent']
 
 
     ### Create radNoteGeneral ###
@@ -202,14 +220,6 @@ def main():
     data['eventTypes'].loc[data['NORM Körperschaft'].notnull() == True] = data['eventTypes'] + "|" + "Körperschaft"
     data['eventActors'].loc[data['NORM Körperschaft'].notnull() == True] = data['eventActors'] + "|" + data['NORM Körperschaft']
 
-
-    ### Masse ###
-    # create column for "extentAndMedium" 
-    # and add values from "Blattmasse (H) in cm" and "Blattmasse (B) in cm"
-    # if not null add values from "Masse (T) in cm"
-    data['extentAndMedium'] = data['Blattmasse (H) in cm'] + " x " + data['Blattmasse (B) in cm']
-    data['extentAndMedium'].loc[data['Masse (T) in cm'].notnull() == True] = data['extentAndMedium'] + " x " + data['Masse (T) in cm'].astype(str)
-    data['extentAndMedium'] = data['extentAndMedium'] + " cm"
 
 ### end : data preparation ###
 
@@ -322,6 +332,9 @@ def main():
     # TODO: sort index by identifier
     mydata['identifier'] = mydata['Original Dateiname / Signatur']
 
+    # add repostiory name to all ressources
+    mydata['repository'] = "Archiv der Kinder- und Jugendzeichnung"
+
     # rename columns
     mydata.rename(columns={
         'lod': 'levelOfDescription',
@@ -330,17 +343,17 @@ def main():
         'Notizen (intern)': 'radPublishersSeriesNote',
         'Zustand': 'physicalCharacteristics',
         'Portal Publikation': 'radTitleProperOfPublishersSeries',
-        'Kamera': 'digitization'}, inplace=True)
+        'Kamera': 'radNotePhysicalDescription'}, inplace=True)
 
     # final columns
     column_names = [
         'alternativeIdentifiers',
         'alternativeIdentifierLabels',
-        #'repository', #not used
+        'repository',
         #'legacyId',
         #'parentId',
         'scopeAndContent',
-        'digitization',
+        'radNotePhysicalDescription',
         'radPublishersSeriesNote',
         'archivalHistory',
         #'alternateTitle',
