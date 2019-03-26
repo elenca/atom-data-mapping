@@ -310,6 +310,7 @@ def main():
         'archivalHistory'
         ]
     df_lod = df_lod[df_column_names]
+
     print(df_lod)
     print(df_lod.dtypes)
 
@@ -344,6 +345,8 @@ def main():
 
     # add repostiory name to all ressources
     mydata['repository'] = "Archiv der Kinder- und Jugendzeichnung"
+
+    mydata = mydata.drop_duplicates(subset='digitalObjectPath', keep='first', inplace=False)
 
     # rename columns
     mydata.rename(columns={
