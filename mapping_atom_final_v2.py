@@ -113,7 +113,6 @@ def main():
     data['digitalObjectPath'] = data['Path']
     data['digitalObjectPath'].loc[data['Teilserie'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Teilserie']
     data['digitalObjectPath'].loc[data['Akte'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Akte']
-    data['dop'] = data['digitalObjectPath']
     data['digitalObjectPath'].loc[data['identifier'].notnull() == True] = data['digitalObjectPath'] + "/" + data['identifier']
 
     ### HierarchyPath
@@ -186,13 +185,13 @@ def main():
     data['extent'] = data['Blattmasse (H) in cm']
     data['extent'].loc[data['Blattmasse (B) in cm'].notnull() == True] = data['extent'] + " x " + data['Blattmasse (B) in cm'].astype(str)
     data['extent'].loc[data['Masse (T) in cm'].notnull() == True] = data['extent'] + " x " + data['Masse (T) in cm'].astype(str)
-    data['extent'] = data['extentAndMedium'] + " cm"
+    data['extent'] = data['extent'] + " cm"
 
     data['extentAndMedium'].loc[data['extent'].notnull() == True] = data['extentAndMedium'] + "| Masse: " + data['extent']
 
 
     ### Tags ###
-    data['scope_Objekt'].loc[data['Tag(s)'].notnull() == True] = data['scope_Objekt'] + " Tags: " + data['Tag(s)']
+    data['scope_Objekt'].loc[data['Tag(s)'].notnull() == True] = data['scope_Objekt'] + "\nTags: " + data['Tag(s)']
 
     ### NameAccessPoints ###
     data['nameAccessPoints'] = data['Kanon'] + " (Kanon)"
@@ -212,6 +211,9 @@ def main():
 
     ### Prämierung ###
     data['nameAccessPoints'].loc[data['Preis'].notnull() == True] = data['nameAccessPoints'] + "|" + data['Preis'] + " (Prämierung)"
+
+    ### Ort ###
+    data['placeAccessPoints'] = data['eventPlaces']
 
 ### end : data preparation ###
 
@@ -309,6 +311,8 @@ def main():
     data['lod'] = '4Objekt'
     data['title'] = data['Objekt'].apply(set_value)
     data['scopeAndContent'] = data['scope_Objekt'].apply(set_value)
+    #data['digitalObjectPath'] = data['digitalObjectPath'].apply(set_value)
+    #data['hierarchyPath'] = data['hierarchyPath'].apply(set_value)
 
 
     ### data merging ###
@@ -328,9 +332,6 @@ def main():
 
     # rename levels of description
     mydata['lod'] = mydata['lod'].str.replace('\d+', '')
-
-    # TODO: sort index by identifier
-    mydata['identifier'] = mydata['Original Dateiname / Signatur']
 
     # add repostiory name to all ressources
     mydata['repository'] = "Archiv der Kinder- und Jugendzeichnung"
@@ -396,9 +397,8 @@ def main():
 
 
 ### authority records ###
-
     # authors
-    df_author = mydata[['author', 'Urheber (Name, Vorname)', 'teacher', 'Zeitraum von', 'Zeitraum bis', 'Datierung']]
+    df_author = mydata[['author', 'Urheber (Name, Vorname)', 'teacher', 'eventStartDates', 'eventEndDates', 'eventDates']]
     print(df_author)
     df_author['authorizedFormOfName'] = df_author['author'].drop_duplicates()
     df_author['parentAuthorizedFormOfName'] = df_author['author']
@@ -407,16 +407,16 @@ def main():
     df_author['sourceAuthorizedFormOfName'] = df_author['author']
     df_author['targetAuthorizedFormOfName'] = df_author['teacher']
 
-    df_author['datesOfExistence'] = df_author[['Zeitraum von', 'Zeitraum bis', 'Datierung']].apply(lambda x: str(x['Datierung']) if x['Datierung'] is not np.nan else str(x['Zeitraum von']) + "-" + str(x['Zeitraum bis']), axis=1)
-    df_author['date'] = df_author['Datierung']
-    df_author['startDate'] = df_author['Zeitraum von']
-    df_author['endDate'] = df_author['Zeitraum bis']
+    df_author['datesOfExistence'] = df_author[['eventStartDates', 'eventEndDates', 'eventDates']].apply(lambda x: str(x['eventDates']) if x['eventDates'] is not np.nan else str(x['eventStartDates']) + "-" + str(x['eventEndDates']), axis=1)
+    df_author['date'] = df_author['eventDates']
+    df_author['startDate'] = df_author['eventStartDates']
+    df_author['endDate'] = df_author['eventEndDates']
 
     df_author['actorOccupations'] = "Lernende"
     df_author['formType'] = "parallel"
     df_author['culture'] = "de"
     df_author['category'] = "hierarchisch"
-    df_author['description'] = "ist Schüler/in von"
+    df_author['description'] = "Schüler/in - Lehrperson"
     df_author = df_author.dropna(subset=['authorizedFormOfName'])
     print(df_author)
 
@@ -437,7 +437,7 @@ def main():
 
     df_preis = mydata[['Preis']].drop_duplicates()
     df_preis['authorizedFormOfName'] = df_preis['Preis']
-    df_preis['actorOccupations'] = "Ehrung"
+    df_preis['actorOccupations'] = "Prämierung"
 
     df_wettbwewerb = mydata[['NORM Körperschaft']].drop_duplicates()
     df_wettbwewerb['authorizedFormOfName'] = df_wettbwewerb['NORM Körperschaft']
