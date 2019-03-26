@@ -69,7 +69,7 @@ def set_class(value):
 def main():
     """Summary"""
 
-    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Jupyter_Notebook/AUTO_ATOM_20190305.csv"
+    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Jupyter_Notebook/Medadaten_Dump_20190325.csv"
     data = pd.read_csv(path_to_file, encoding='utf-8', index_col=False)
 
 ### data preparation ###
@@ -79,7 +79,7 @@ def main():
     data['Titel'].loc[data['Titel'].notnull() == False] = "[" + data['Alternativer Titel'] + "]"
 
     # rename title columns
-    data.rename(columns={'THEMEN NAME (Stufe Kollektion)': 'Path', 'Titel Sub-Dossier': 'Teilserie', 'Titel Sub-Sub-Dossier': 'Akte', 'Titel': 'Objekt'}, inplace=True)
+    data.rename(columns={'THEMEN NAME (Stufe Kollektion)': 'Path', 'Titel Teilserie': 'Teilserie', 'Titel Akte': 'Akte', 'Titel': 'Objekt'}, inplace=True)
 
     # rename scopeAndContent columns
     data.rename(columns={'BESCHREIBUNG (Stufe Kollektion)': 'scope_Serie', 'Merkmale der Sub-Dossiers': 'scope_Teilserie', 'Merkmale der Sub-Sub-Dossiers': 'scope_Akte', 'Beschreibung': 'scope_Objekt'}, inplace=True)
@@ -188,11 +188,10 @@ def main():
     data['extentAndMedium'].loc[data['extent'].notnull() == True] = data['extentAndMedium'] + "| Masse: " + data['extent']
 
 
-    ### Create radNoteGeneral ###
-    data['radNoteGeneral'] = "Tags: " + data['Tag(s)']
+    ### Tags ###
+    data['scope_Objekt'].loc[data['Tag(s)'].notnull() == True] = data['scope_Objekt'] + " Tags: " + data['Tag(s)']
 
-
-    ### Create nameAccessPoints (Kanon, Preis) ###
+    ### NameAccessPoints ###
     data['nameAccessPoints'] = data['Kanon'] + " (Kanon)"
 
     ### Lehrperson ###
