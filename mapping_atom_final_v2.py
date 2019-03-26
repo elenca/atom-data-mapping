@@ -116,11 +116,11 @@ def main():
     data['digitalObjectPath'].loc[data['identifier'].notnull() == True] = data['digitalObjectPath'] + "/" + data['identifier']
 
     ### HierarchyPath
-    data['parentId'] = "0_" + data['Bestand']
-    data['parentId'] = "/1_" + data['Teilbestand']
-    data['parentId'] = "/2_" + data['Serie']
-    data['parentId'].loc[data['Teilserie'].notnull() == True] = data['parentId'] + "/3_" + data['Teilserie']
-    data['parentId'].loc[data['Akte'].notnull() == True] = data['parentId'] + "/4_" + data['Akte']
+    data['hierarchyPath'] = "0_" + data['Bestand']
+    data['hierarchyPath'] = "/1_" + data['Teilbestand']
+    data['hierarchyPath'] = "/2_" + data['Serie']
+    data['hierarchyPath'].loc[data['Teilserie'].notnull() == True] = data['hierarchyPath'] + "/3_" + data['Teilserie']
+    data['hierarchyPath'].loc[data['Akte'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Akte']
 
     ### Author
     # create new field "author_id"
@@ -167,12 +167,6 @@ def main():
     data['subjectAccessPoints'] = data['subjectAccessPoints'] + "|" + data['Schlagworte']
 
 
-    ### Create nameAccessPoints (Kanon, Preis) ###
-    data['nameAccessPoints'] = data['Kanon']
-    data['nameAccessPoints'].loc[data['Preis'].notnull() == True] = data['nameAccessPoints'] + "|" + data['Preis'] + " (Prämierung)"
-    data['nameAccessPoints'].iloc[:12]
-
-
     ### GenreAccessPoints (Technik) ###
     data['Technik'] = data['Technik'].str.replace(', ', '|')
     data['genreAccessPoints'] = data['Technik']
@@ -198,30 +192,27 @@ def main():
     data['radNoteGeneral'] = "Tags: " + data['Tag(s)']
 
 
+    ### Create nameAccessPoints (Kanon, Preis) ###
+    data['nameAccessPoints'] = data['Kanon'] + " (Kanon)"
+
     ### Lehrperson ###
     data['teacher'] = data['Lehrperson (Name, Vorname)']
     data['teacher'].loc[data['NORM Lehrperson'].notnull() == True] = data['NORM Lehrperson']
-
-
-    ### Lehrperson ###
-    data['eventTypes'].loc[data['teacher'].notnull() == True] = data['eventTypes'] + "|" + "Lehrperson"
-    data['eventActors'].loc[data['teacher'].notnull() == True]  = data['eventActors'] + "|" + data['teacher']
+    data['nameAccessPoints'].loc[data['teacher'].notnull() == True] = data['nameAccessPoints'] + "|" + data['teacher'] + " (Lehrperson)"
 
     ### Schulhaus ###
     data['school'] = data['Schulhaus']
     data['school'].loc[data['NORM SHaus'].notnull() == True] = data['NORM SHaus']
+    data['nameAccessPoints'].loc[data['school'].notnull() == True] = data['nameAccessPoints'] + "|" + data['school'] + " (Schulhaus)"
 
+    ### Körperschaft/Wettbewerb ###
+    data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints'] + "|" + data['NORM Körperschaft'] + " (Wettbewerb)"
 
-    data['eventTypes'].loc[data['school'].notnull() == True] = data['eventTypes'] + "|" + "Schulhaus"
-    data['eventActors'].loc[data['school'].notnull() == True] = data['eventActors'] + "|" + data['school']
-
-
-    ### Körperschaft ###
-    data['eventTypes'].loc[data['NORM Körperschaft'].notnull() == True] = data['eventTypes'] + "|" + "Körperschaft"
-    data['eventActors'].loc[data['NORM Körperschaft'].notnull() == True] = data['eventActors'] + "|" + data['NORM Körperschaft']
-
+    ### Prämierung ###
+    data['nameAccessPoints'].loc[data['Preis'].notnull() == True] = data['nameAccessPoints'] + "|" + data['Preis'] + " (Prämierung)"
 
 ### end : data preparation ###
+
 
 ### levels of description ###
 
@@ -350,6 +341,7 @@ def main():
         'alternativeIdentifiers',
         'alternativeIdentifierLabels',
         'repository',
+        'hierarchyPath',
         #'legacyId',
         #'parentId',
         'scopeAndContent',
