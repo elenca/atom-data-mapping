@@ -113,6 +113,7 @@ def main():
     data['digitalObjectPath'] = data['Path']
     data['digitalObjectPath'].loc[data['Teilserie'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Teilserie']
     data['digitalObjectPath'].loc[data['Akte'].notnull() == True] = data['digitalObjectPath'] + "/" + data['Akte']
+    data['dop'] = data['digitalObjectPath']
     data['digitalObjectPath'].loc[data['identifier'].notnull() == True] = data['digitalObjectPath'] + "/" + data['identifier']
 
     ### HierarchyPath
@@ -121,6 +122,8 @@ def main():
     data['hierarchyPath'] = data['hierarchyPath'] + "/2_" + data['Serie']
     data['hierarchyPath'].loc[data['Teilserie'].notnull() == True] = data['hierarchyPath'] + "/3_" + data['Teilserie']
     data['hierarchyPath'].loc[data['Akte'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Akte']
+
+    data = data.sort_values(by = ['digitalObjectPath'])
 
     ### Author
     # create new field "author_id"
@@ -244,6 +247,8 @@ def main():
     df_serie = df_sub.loc[df_sub['lod'] == '1Serie']
     df_serie['title'] = df_serie['Serie'].apply(set_value)
     df_serie['scopeAndContent'] = df_serie['scope_Serie'].apply(set_value)
+    df_serie['digitalObjectPath'] = df_serie['digitalObjectPath'].apply(set_value)
+    df_serie['hierarchyPath'] = df_serie['hierarchyPath'].apply(set_value)
 
     # set the eventStartDates, eventEndDates and eventDates
     df_serie['eventStartDates'] = df_serie['ENTSTEHUNGSZEIT - VON (Stufe Kollektion)'].apply(set_value)
@@ -263,6 +268,8 @@ def main():
     df_teilserie = df_sub.loc[df_sub['lod'] == '2Teilserie']
     df_teilserie['title'] = df_teilserie['Teilserie'].apply(set_value)
     df_teilserie['scopeAndContent'] = df_teilserie['scope_Teilserie'].apply(set_value)
+    df_teilserie['digitalObjectPath'] = df_teilserie['digitalObjectPath'].apply(set_value)
+    df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPath'].apply(set_value)
     df_lod = df_lod.append(df_teilserie)
 
     # create a dataframe for the level "Akte" and append to "df_lod"
@@ -270,6 +277,8 @@ def main():
     df_akte = df_sub.loc[df_sub['lod'] == '3Akte']
     df_akte['title'] = df_akte['Akte'].apply(set_value)
     df_akte['scopeAndContent'] = df_akte['scope_Akte'].apply(set_value)
+    df_akte['digitalObjectPath'] = df_akte['digitalObjectPath'].apply(set_value)
+    df_akte['hierarchyPath'] = df_akte['hierarchyPath'].apply(set_value)
     df_lod = df_lod.append(df_akte)
 
     s1 = pd.Series(['0Bestand', 'IIJ'])
@@ -311,7 +320,8 @@ def main():
 
     # sort the index by the index number and the level
     mydata = mydata.sort_index()
-    mydata = mydata.rename_axis('MyIndex').sort_values(by = ['MyIndex', 'lod'])
+    mydata = mydata.rename_axis('MyIndex').sort_values(by = ['digitalObjectPath'])
+    #mydata = mydata.rename_axis('MyIndex').sort_values(by = ['MyIndex', 'lod'])
 
     # reset the index
     mydata = mydata.reset_index()
