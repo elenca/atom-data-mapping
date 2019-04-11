@@ -101,6 +101,10 @@ def main():
     # create column for level "Serie"
     data['Serie'] = data['Path'].apply(split_column, number=(2))
 
+    ### LevelOfDescription
+    data['lod'] = "Objekt"
+    print(data)
+
     ### Identifier
     # create column for identifier
     data['identifier'] = data['Original Dateiname / Signatur'].replace({r'(.*)(.tif|.tiff|.jpg|.pdf)' : r'\1'}, regex=True)
@@ -111,7 +115,7 @@ def main():
     ### PublicationStatus
     data['publicationStatus'] = data['Portal Publikation'].str.replace('NEIN', 'Entwurf')
 
-    ### AlternativeIdentifiers
+    ### TODO: AlternativeIdentifiers
     data['alternativeIdentifiers'] = data['Ressourcen-ID(s)']
     data['alternativeIdentifiers'].loc[data['Kartei Heller'].notnull() == True] = data['alternativeIdentifiers'].astype(str) + "|" + data['Kartei Heller'].astype(str).replace({r'(.*)(.0)' : r'\1'}, regex=True)
     data['alternativeIdentifiers'].loc[data['Kartei Weidmann'].notnull() == True] = data['alternativeIdentifiers'].astype(str) + "|" + data['Kartei Weidmann'].astype(str).replace({r'(.*)(.0)' : r'\1'}, regex=True)
@@ -143,10 +147,8 @@ def main():
     data['hierarchyPath'].loc[data['Akte'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Akte']
     #data['hierarchyPathAkte'] = data['hierarchyPath']
 
+    # sort data
     data = data.sort_values(by = ['digitalObjectPath'])
-
-    ### LevelOfDescription
-    data['lod'] = "Objekt"
 
     ### Author
     # create new field "author_id"
@@ -241,14 +243,17 @@ def main():
 
     #### Count occurrences
     data['count'] = data['hierarchyPath'].value_counts()
+    #data['countTeilbestand'] = data['hierarchyPathTeilbestand'].value_counts()
+    #data['countSerie'] = data['hierarchyPathSerie'].value_counts()
+    #data['countTeilserie'] = data['hierarchyPathTeilserie'].value_counts()
+    #data['countAkte'] = data['hierarchyPathAkte'].value_counts()
+    print(data['count'])
 
 ### end : data preparation ###
 
 
 ### levels of description ###
     df_sub = data.drop_duplicates(subset='hierarchyPath', keep='first', inplace=False)
-
-    print(df_sub)
 
     # create a dataframe for the level "Serie" and append it to the dataframe "df_lod"
     # set the levelOfDescription, title and scopeAndContent
@@ -270,11 +275,13 @@ def main():
     df_serie['eventActors'] = df_serie['PROVENIENZ (Stufe Kollektion)'].apply(set_value)
     df_serie['archivalHistory'] = df_serie['BESITZVERMERK (Stufe Kollektion)'].apply(set_value)
 
+    # drop duplicates of type "Serie"
+    df_serie = df_serie.drop_duplicates(subset='Serie', keep='first', inplace=False)
+
     # append the level "Serie" to a new dataframe "df_lod"
     df_lod = df_serie
 
     # create a dataframe for the level "Teilserie" and append to "df_lod"
-    #df_sub['lod'].loc[data['Teilserie'].notnull() == True] = df_sub['Teilserie'].apply(set_level, level=('2Teilserie'))
     df_sub['lod'] = df_sub['Teilserie'].apply(set_level, level=('2Teilserie'))
     df_teilserie = df_sub.loc[df_sub['lod'] == '2Teilserie']
     df_teilserie['title'] = df_teilserie['Teilserie'].apply(set_value)
@@ -283,6 +290,10 @@ def main():
     df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPath'].apply(set_value)
     df_teilserie['extentAndMedium'] = df_teilserie['count'].apply(set_value)
     df_teilserie['eventActors'] = df_teilserie['NORM Körperschaft'].apply(set_value)
+
+    # drop duplicates of type "Serie"
+    df_teilserie = df_teilserie.drop_duplicates(subset='Teilserie', keep='first', inplace=False)
+
     df_lod = df_lod.append(df_teilserie)
 
     # create a dataframe for the level "Akte" and append to "df_lod"
@@ -294,8 +305,6 @@ def main():
     df_akte['hierarchyPath'] = df_akte['hierarchyPath'].apply(set_value)
     df_akte['extentAndMedium'] = df_akte['count'].apply(set_value)
     df_lod = df_lod.append(df_akte)
-
-    df_lod = df_lod.drop_duplicates(subset='hierarchyPath', keep='first', inplace=False)
 
     s1 = pd.Series(['0Bestand', 'IIJ', 'IIJ', '0_IIJ'])
     s2 = pd.Series(['0Teilbestand', 'Kinderzeichnungen Schweiz', 'IIJ/Kinderzeichnungen Schweiz', '0_IIJ/1_Kinderzeichnungen Schweiz'])
@@ -318,9 +327,6 @@ def main():
         'archivalHistory'
         ]
     df_lod = df_lod[df_column_names]
-
-    print(df_lod)
-    print(df_lod.dtypes)
 
     ### data transformation ###
 
@@ -420,7 +426,6 @@ def main():
 ### authority records ###
     # authors
     df_author = mydata[['author', 'Urheber (Name, Vorname)', 'teacher', 'eventStartDates', 'eventEndDates', 'eventDates']]
-    print(df_author)
     df_author['authorizedFormOfName'] = df_author['author'].drop_duplicates()
     df_author['parentAuthorizedFormOfName'] = df_author['author']
     df_author['alternateForm'] = df_author['Urheber (Name, Vorname)']
