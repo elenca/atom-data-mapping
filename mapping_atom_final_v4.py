@@ -65,6 +65,14 @@ def set_class(value):
     else:
         return value
 
+# function to define the level 
+def set_level(value, level):
+    return level if not pd.isnull(value) else value
+
+# function to set the value for a column
+def set_value(value):
+    return value if not pd.isnull(value) else value
+
 
 def main():
     """Summary"""
@@ -127,13 +135,13 @@ def main():
     data['hierarchyPathTeilbestand'] = data['hierarchyPath']
 
     data['hierarchyPath'] = data['hierarchyPath'] + "/2_" + data['Serie']
-    data['hierarchyPathSerie'] = data['hierarchyPath']
+    #data['hierarchyPathSerie'] = data['hierarchyPath']
 
     data['hierarchyPath'].loc[data['Teilserie'].notnull() == True] = data['hierarchyPath'] + "/3_" + data['Teilserie']
-    data['hierarchyPathTeilserie'] = data['hierarchyPath']
+    #data['hierarchyPathTeilserie'] = data['hierarchyPath']
 
     data['hierarchyPath'].loc[data['Akte'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Akte']
-    data['hierarchyPathAkte'] = data['hierarchyPath']
+    #data['hierarchyPathAkte'] = data['hierarchyPath']
 
     data = data.sort_values(by = ['digitalObjectPath'])
 
@@ -151,10 +159,8 @@ def main():
     data['gender'] = data['Geschlecht'].apply(set_gender)
     data['author'] = data['gender'] + "-" + data['author_id'].apply(cast_value)
 
-
     data['eventTypes'] = "Herstellung"
     data['eventActors'] = data['author']
-    print(data['author'])
 
 
     # Create field for "eventDescription" 
@@ -231,41 +237,18 @@ def main():
     ### Ort ###
     data['placeAccessPoints'] = data['eventPlaces']
 
+    data = data.drop_duplicates(subset='digitalObjectPath', keep='first', inplace=False)
+
     #### Count occurrences
     data['count'] = data['hierarchyPath'].value_counts()
-    #data['countTeilbestand'] = data['hierarchyPathTeilbestand'].value_counts()
-    #data['countSerie'] = data['hierarchyPathSerie'].value_counts()
-    #data['countTeilserie'] = data['hierarchyPathTeilserie'].value_counts()
-    #data['countAkte'] = data['hierarchyPathAkte'].value_counts()
-    print(data['count'])
 
 ### end : data preparation ###
 
 
 ### levels of description ###
+    df_sub = data.drop_duplicates(subset='hierarchyPath', keep='first', inplace=False)
 
-    # extract levels of description
-    duplicates = data[data.duplicated(['Serie', 'Teilserie', 'Akte'])]
-
-    data_index = data.index.tolist()
-    duplicates_index = duplicates.index.tolist()
-
-    data_i = pd.Index(data_index)
-
-    duplicates_i = pd.Index(duplicates_index)
-
-    matches = data_i.difference(duplicates_i)
-
-    # create dataframe containing the extracted levels of description
-    df_sub = data.iloc[matches]
-
-    # function to define the level 
-    def set_level(value, level):
-        return level if not pd.isnull(value) else value
-
-    # function to set the value for a column
-    def set_value(value):
-        return value if not pd.isnull(value) else value
+    print(df_sub)
 
     # create a dataframe for the level "Serie" and append it to the dataframe "df_lod"
     # set the levelOfDescription, title and scopeAndContent
@@ -291,6 +274,7 @@ def main():
     df_lod = df_serie
 
     # create a dataframe for the level "Teilserie" and append to "df_lod"
+    #df_sub['lod'].loc[data['Teilserie'].notnull() == True] = df_sub['Teilserie'].apply(set_level, level=('2Teilserie'))
     df_sub['lod'] = df_sub['Teilserie'].apply(set_level, level=('2Teilserie'))
     df_teilserie = df_sub.loc[df_sub['lod'] == '2Teilserie']
     df_teilserie['title'] = df_teilserie['Teilserie'].apply(set_value)
@@ -310,6 +294,8 @@ def main():
     df_akte['hierarchyPath'] = df_akte['hierarchyPath'].apply(set_value)
     df_akte['extentAndMedium'] = df_akte['count'].apply(set_value)
     df_lod = df_lod.append(df_akte)
+
+    df_lod = df_lod.drop_duplicates(subset='hierarchyPath', keep='first', inplace=False)
 
     s1 = pd.Series(['0Bestand', 'IIJ', 'IIJ', '0_IIJ'])
     s2 = pd.Series(['0Teilbestand', 'Kinderzeichnungen Schweiz', 'IIJ/Kinderzeichnungen Schweiz', '0_IIJ/1_Kinderzeichnungen Schweiz'])
@@ -368,7 +354,7 @@ def main():
     # add repostiory name to all ressources
     mydata['repository'] = "Archiv der Kinder- und Jugendzeichnung"
 
-    mydata = mydata.drop_duplicates(subset='digitalObjectPath', keep='first', inplace=False)
+    #mydata = mydata.drop_duplicates(subset='digitalObjectPath', keep='first', inplace=False)
 
     # rename columns
     mydata.rename(columns={
