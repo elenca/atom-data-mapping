@@ -73,7 +73,7 @@ def set_value(value):
 def main():
     """Summary"""
 
-    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Jupyter_Notebook/Medadaten_Dump_20190325.csv"
+    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Jupyter_Notebook/Ingest_AtoM_20190415-csv.csv"
     data = pd.read_csv(path_to_file, encoding='utf-8', index_col=False)
 
 ### data preparation ###
@@ -135,15 +135,9 @@ def main():
     data['hierarchyPath'] = "0_" + data['Bestand']
     data['hierarchyPath'] = data['hierarchyPath'] + "/1_" + data['Teilbestand']
     data['hierarchyPathTeilbestand'] = data['hierarchyPath']
-
     data['hierarchyPath'] = data['hierarchyPath'] + "/2_" + data['Serie']
-    #data['hierarchyPathSerie'] = data['hierarchyPath']
-
     data['hierarchyPath'].loc[data['Teilserie'].notnull() == True] = data['hierarchyPath'] + "/3_" + data['Teilserie']
-    #data['hierarchyPathTeilserie'] = data['hierarchyPath']
-
     data['hierarchyPath'].loc[data['Akte'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Akte']
-    #data['hierarchyPathAkte'] = data['hierarchyPath']
 
 
     ### Author
@@ -204,7 +198,7 @@ def main():
     # if not null add to extentAndMedium
     data['extent'] = data['Blattmasse (H) in cm'].str.replace(', ', ',')
     data['extent'].loc[data['Blattmasse (B) in cm'].notnull() == True] = data['extent'] + " x " + data['Blattmasse (B) in cm'].astype(str).str.replace(', ', ',')
-    data['extent'].loc[data['Masse (T) in cm'].notnull() == True] = data['extent'] + " x " + data['Masse (T) in cm'].astype(str).str.replace(', ', ',')
+    #data['extent'].loc[data['Masse (T) in cm'].notnull() == True] = data['extent'] + " x " + data['Masse (T) in cm'].astype(str).str.replace(', ', ',')
     data['extent'] = data['extent'] + " cm"
 
     data['extentAndMedium'].loc[data['extent'].notnull() == True] = data['extentAndMedium'] + "| Masse: " + data['extent']
@@ -456,7 +450,7 @@ def main():
 
     df_kanon = mydata[['Kanon']].drop_duplicates()
     df_kanon['authorizedFormOfName'] = df_kanon['Kanon']
-    df_kanon['actorOccupations'] = "Werk"
+    df_kanon['actorOccupations'] = "Referenz"
 
     df_preis = mydata[['Preis']].drop_duplicates()
     df_preis['authorizedFormOfName'] = df_preis['Preis']
