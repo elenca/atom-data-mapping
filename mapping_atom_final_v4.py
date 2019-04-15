@@ -3,10 +3,6 @@
 """
 # coding: utf-8
 
-### TODO:
-# add filename to digitalobjectpath
-# 
-
 
 import pandas as pd
 import numpy as np
@@ -101,9 +97,8 @@ def main():
     # create column for level "Serie"
     data['Serie'] = data['Path'].apply(split_column, number=(2))
 
-    ### LevelOfDescription
+    ### LevelOfDescription (lod)
     data['lod'] = "Objekt"
-    print(data)
 
     ### Identifier
     # create column for identifier
@@ -133,6 +128,9 @@ def main():
     ### add identifier
     data['digitalObjectPath'].loc[data['identifier'].notnull() == True] = data['digitalObjectPath'] + "/" + data['identifier']
 
+    # sort data
+    data = data.sort_values(by = ['digitalObjectPath'])
+
     ### HierarchyPath
     data['hierarchyPath'] = "0_" + data['Bestand']
     data['hierarchyPath'] = data['hierarchyPath'] + "/1_" + data['Teilbestand']
@@ -147,8 +145,6 @@ def main():
     data['hierarchyPath'].loc[data['Akte'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Akte']
     #data['hierarchyPathAkte'] = data['hierarchyPath']
 
-    # sort data
-    data = data.sort_values(by = ['digitalObjectPath'])
 
     ### Author
     # create new field "author_id"
@@ -239,7 +235,7 @@ def main():
     ### Ort ###
     data['placeAccessPoints'] = data['eventPlaces']
 
-    data = data.drop_duplicates(subset='digitalObjectPath', keep='first', inplace=False)
+    #data = data.drop_duplicates(subset='digitalObjectPath', keep='first', inplace=False)
 
     #### Count occurrences
     data['count'] = data['hierarchyPath'].value_counts()
@@ -425,12 +421,12 @@ def main():
 
 ### authority records ###
     # authors
-    df_author = mydata[['author', 'Urheber (Name, Vorname)', 'teacher', 'eventStartDates', 'eventEndDates', 'eventDates']]
-    df_author['authorizedFormOfName'] = df_author['author'].drop_duplicates()
-    df_author['parentAuthorizedFormOfName'] = df_author['author']
+    df_author = mydata[['eventActors', 'Urheber (Name, Vorname)', 'teacher', 'eventStartDates', 'eventEndDates', 'eventDates']]
+    df_author['authorizedFormOfName'] = df_author['eventActors'].drop_duplicates()
+    df_author['parentAuthorizedFormOfName'] = df_author['eventActors']
     df_author['alternateForm'] = df_author['Urheber (Name, Vorname)']
 
-    df_author['sourceAuthorizedFormOfName'] = df_author['author']
+    df_author['sourceAuthorizedFormOfName'] = df_author['eventActors']
     df_author['targetAuthorizedFormOfName'] = df_author['teacher']
 
     df_author['datesOfExistence'] = df_author[['eventStartDates', 'eventEndDates', 'eventDates']].apply(lambda x: str(x['eventDates']) if x['eventDates'] is not np.nan else str(x['eventStartDates']) + "-" + str(x['eventEndDates']), axis=1)
