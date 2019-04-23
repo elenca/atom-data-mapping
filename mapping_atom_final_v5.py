@@ -69,6 +69,20 @@ def set_level(value, level):
 def set_value(value):
     return value if not pd.isnull(value) else value
 
+# function to set the value for a column
+def set_organisation(value):
+    if value == 'Internationales Institut für das Studium der Jugendzeichnung':
+        return "Organisation"
+    else:
+        return "Schüler/in"
+
+# function to set the value for a column
+def set_eventActor():
+    if data['NORM Körperschaft'].notnull() == True:
+        return data['NORM Körperschaft'].set_value()
+    else:
+        return data['author'].set_value()
+
 
 def main():
     """Summary"""
@@ -151,8 +165,7 @@ def main():
     data['author'] = data['gender'] + "-" + data['author_id'].apply(cast_value)
 
     data['eventTypes'] = "Herstellung"
-    data['eventActors'] = data['author']
-
+    data['eventActors'] = data['eventActors'].apply(set_eventActor)
 
     # Create field for "eventDescription" 
     # add values for "Alter" and "Schulklasse"
@@ -435,7 +448,7 @@ def main():
     df_author['startDate'] = df_author['eventStartDates']
     df_author['endDate'] = df_author['eventEndDates']
 
-    df_author['actorOccupations'] = "Schüler/in"
+    df_author['actorOccupations'] = df_author['authorizedFormOfName'].apply(set_organisation)
     df_author['formType'] = "parallel"
     df_author['culture'] = "de"
     df_author['category'] = "hierarchisch"
