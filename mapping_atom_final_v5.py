@@ -165,7 +165,7 @@ def main():
     data['author'] = data['gender'] + "-" + data['author_id'].apply(cast_value)
 
     data['eventTypes'] = "Herstellung"
-    data['eventActors'] = data['eventActors'].apply(set_eventActor)
+    data['eventActors'] = data['author']
 
     # Create field for "eventDescription" 
     # add values for "Alter" and "Schulklasse"
