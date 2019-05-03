@@ -236,6 +236,8 @@ def main():
     ### Körperschaft/Wettbewerb ###
     data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints'] + "|" + data['NORM Körperschaft'] + " (Wettbewerb)"
 
+    data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints']
+
     ### Prämierung ###
     data['nameAccessPoints'].loc[data['Preis'].notnull() == True] = data['nameAccessPoints'] + "|" + data['Preis'] + " (Prämierung)"
 
@@ -377,7 +379,7 @@ def main():
         'alternativeIdentifierLabels',
         'repository',
         'hierarchyPath',
-        'digitalObjectP',
+        #'digitalObjectP',
         #'legacyId',
         #'parentId',
         'scopeAndContent',
