@@ -267,7 +267,7 @@ def main():
     df_serie['title'] = df_serie['Serie'].apply(set_value)
     df_serie['scopeAndContent'] = df_serie['scope_Serie'].apply(set_value)
     df_serie['digitalObjectP'] = df_serie['digitalObjectP'].apply(set_value)
-    df_serie['hierarchyPath'] = df_serie['hierarchyPath'].apply(set_value)
+    df_serie['hierarchyPath'] = df_serie['hierarchyPathSerie'].apply(set_value)
     df_serie['extentAndMedium'] = df_serie['count'].apply(set_value)
 
     # set the eventStartDates, eventEndDates and eventDates
@@ -292,7 +292,7 @@ def main():
     df_teilserie['title'] = df_teilserie['Teilserie'].apply(set_value)
     df_teilserie['scopeAndContent'] = df_teilserie['scope_Teilserie'].apply(set_value)
     df_teilserie['digitalObjectP'] = df_teilserie['digitalObjectP'].apply(set_value)
-    df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPath'].apply(set_value)
+    df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPathTeilserie'].apply(set_value)
     df_teilserie['extentAndMedium'] = df_teilserie['count'].apply(set_value)
     df_teilserie['eventActors'] = df_teilserie['NORM Körperschaft'].apply(set_value)
 
@@ -307,7 +307,7 @@ def main():
     df_akte['title'] = df_akte['Akte'].apply(set_value)
     df_akte['scopeAndContent'] = df_akte['scope_Akte'].apply(set_value)
     df_akte['digitalObjectP'] = df_akte['digitalObjectP'].apply(set_value)
-    df_akte['hierarchyPath'] = df_akte['hierarchyPath'].apply(set_value)
+    df_akte['hierarchyPath'] = df_akte['hierarchyPathAkte'].apply(set_value)
     df_akte['extentAndMedium'] = df_akte['count'].apply(set_value)
     df_lod = df_lod.append(df_akte)
 
