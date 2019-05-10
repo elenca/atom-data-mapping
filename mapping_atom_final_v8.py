@@ -76,18 +76,11 @@ def set_organisation(value):
     else:
         return "Schüler/in"
 
-# function to set the value for a column
-def set_eventActor():
-    if data['NORM Körperschaft'].notnull() == True:
-        return data['NORM Körperschaft'].set_value()
-    else:
-        return data['author'].set_value()
-
 
 def main():
     """Summary"""
 
-    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Jupyter_Notebook/Ingest_AtoM_20190415-csv.csv"
+    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Jupyter_Notebook/Ingest_Atom_20190510-csv.csv"
     data = pd.read_csv(path_to_file, encoding='utf-8', index_col=False)
 
 ### data preparation ###
@@ -205,7 +198,7 @@ def main():
     data['subjectAccessPoints'].loc[data['Preis'].notnull() == True] = data['subjectAccessPoints'] + "|" + data['Preis']
 
     ### Create subjectAccessPoints ###
-    data['Schlagworte'] = data['Schlagworte'].str.replace(', ', ' (Schlagwort) |')
+    data['Schlagworte'] = data['Schlagworte'].str.replace(', ', ' (Schlagwort)|')
     data['subjectAccessPoints'] = data['subjectAccessPoints'] + "|" + data['Schlagworte'] + " (Schlagwort)"
 
 
@@ -232,6 +225,7 @@ def main():
 
     ### Tags ###
     data['scope_Objekt'].loc[data['Tag(s)'].notnull() == True] = data['scope_Objekt'] + "| Tags: " + data['Tag(s)']
+    data['scope_Objekt'].loc[data['scope_Objekt'].notnull() == False] = "Tags: " + data['Tag(s)']
 
     ### NameAccessPoints ###
     data['Kanon'] = data['Kanon'] + " (Referenz)"
