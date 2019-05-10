@@ -41,9 +41,9 @@ def set_gender(value):
     if str(value) == 'unbekannt':
         return "ohne Geschlechtsangabe"
     elif str(value) == 'm (♂)':
-        return "männlich"
+        return "männlich (Geschlecht)"
     elif str(value) == 'w (♀)':
-        return "weiblich"
+        return "weiblich (Geschlecht)"
     elif str(value) == 'NaN':
         return value
 
@@ -202,7 +202,7 @@ def main():
 
 
     ### Create subjectAccessPoints ###
-    data['Schlagworte'] = data['Schlagworte'].str.replace(', ', '|')
+    data['Schlagworte'] = data['Schlagworte'].str.replace(', ', ' (Schlagwort) |')
     data['subjectAccessPoints'] = data['subjectAccessPoints'] + "|" + data['Schlagworte']
 
 
