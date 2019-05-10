@@ -41,9 +41,9 @@ def set_gender(value):
     if str(value) == 'unbekannt':
         return "ohne Geschlechtsangabe"
     elif str(value) == 'm (♂)':
-        return "männlich (Geschlecht)"
+        return "männlich"
     elif str(value) == 'w (♀)':
-        return "weiblich (Geschlecht)"
+        return "weiblich"
     elif str(value) == 'NaN':
         return value
 
@@ -198,12 +198,15 @@ def main():
 
     ### Create subject ###
     data['subjectAccessPoints'] = data['Alter']
-    data['subjectAccessPoints'] = data['subjectAccessPoints'] + "|" + data['gender']
+    data['subjectAccessPoints'] = data['subjectAccessPoints'] + "|" + data['gender'] + " (Geschlecht)"
 
+    ### Prämierung ###
+    data['Preis'].loc[data['Preis'].notnull() == True] = data['Preis'] + " (Prämierung)"
+    data['subjectAccessPoints'].loc[data['Preis'].notnull() == True] = data['subjectAccessPoints'] + "|" + data['Preis']
 
     ### Create subjectAccessPoints ###
     data['Schlagworte'] = data['Schlagworte'].str.replace(', ', ' (Schlagwort) |')
-    data['subjectAccessPoints'] = data['subjectAccessPoints'] + "|" + data['Schlagworte']
+    data['subjectAccessPoints'] = data['subjectAccessPoints'] + "|" + data['Schlagworte'] + " (Schlagwort)"
 
 
     ### GenreAccessPoints (Technik) ###
@@ -231,25 +234,30 @@ def main():
     data['scope_Objekt'].loc[data['Tag(s)'].notnull() == True] = data['scope_Objekt'] + "| Tags: " + data['Tag(s)']
 
     ### NameAccessPoints ###
-    data['nameAccessPoints'] = data['Kanon'] + " (Referenz)"
+    data['Kanon'] = data['Kanon'] + " (Referenz)"
+    data['nameAccessPoints'] = data['Kanon']
 
     ### Lehrperson ###
     data['teacher'] = data['Lehrperson (Name, Vorname)']
     data['teacher'].loc[data['NORM Lehrperson'].notnull() == True] = data['NORM Lehrperson']
-    data['nameAccessPoints'].loc[data['teacher'].notnull() == True] = data['nameAccessPoints'] + "|" + data['teacher'] + " (Lehrperson)"
+    data['teacher'] = data['teacher'] + " (Lehrperson)"
+    data['nameAccessPoints'].loc[data['teacher'].notnull() == True] = data['nameAccessPoints'] + "|" + data['teacher']
 
     ### Schulhaus ###
     data['school'] = data['Schulhaus']
     data['school'].loc[data['NORM SHaus'].notnull() == True] = data['NORM SHaus']
-    data['nameAccessPoints'].loc[data['school'].notnull() == True] = data['nameAccessPoints'] + "|" + data['school'] + " (Schulhaus)"
+    data['school'] = data['school'] + " (Schulhaus)"
+    data['nameAccessPoints'].loc[data['school'].notnull() == True] = data['nameAccessPoints'] + "|" + data['school']
 
     ### Körperschaft/Wettbewerb ###
-    data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints'] + "|" + data['NORM Körperschaft'] + " (Wettbewerb)"
+    data['NORM Körperschaft'].loc[data['NORM Körperschaft'].notnull() == True] = data['NORM Körperschaft'] + " (Wettbewerb)"
+    data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints'] + "|" + data['NORM Körperschaft']
 
-    data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints']
+    #TODO: Prüfen, ob korrekt
+    #data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints']
 
     ### Prämierung ###
-    data['nameAccessPoints'].loc[data['Preis'].notnull() == True] = data['nameAccessPoints'] + "|" + data['Preis'] + " (Prämierung)"
+    #data['nameAccessPoints'].loc[data['Preis'].notnull() == True] = data['nameAccessPoints'] + "|" + data['Preis'] + " (Prämierung)"
 
     ### Ort ###
     data['placeAccessPoints'] = data['eventPlaces']
@@ -294,7 +302,8 @@ def main():
     df_teilserie['digitalObjectP'] = df_teilserie['digitalObjectP'].apply(set_value)
     df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPathTeilserie'].apply(set_value)
     df_teilserie['extentAndMedium'] = df_teilserie['count'].apply(set_value)
-    df_teilserie['eventActors'] = df_teilserie['NORM Körperschaft'].apply(set_value)
+    #TODO: Prüfen, ob korrekt
+    df_teilserie['eventActors'].loc[df_teilserie['NORM Körperschaft'].notnull() == True] = df_teilserie['NORM Körperschaft'].apply(set_value)
 
     # drop duplicates of type "Serie"
     df_teilserie = df_teilserie.drop_duplicates(subset='Teilserie', keep='first', inplace=False)
@@ -309,6 +318,7 @@ def main():
     df_akte['digitalObjectP'] = df_akte['digitalObjectP'].apply(set_value)
     df_akte['hierarchyPath'] = df_akte['hierarchyPathAkte'].apply(set_value)
     df_akte['extentAndMedium'] = df_akte['count'].apply(set_value)
+    df_akte['eventActors'] = ""
     df_lod = df_lod.append(df_akte)
 
     s1 = pd.Series(['0Bestand', 'IIJ', 'IIJ', '0_IIJ'])
@@ -475,8 +485,8 @@ def main():
     df_kanon['actorOccupations'] = "Referenz"
 
     df_preis = mydata[['Preis']].drop_duplicates()
-    df_preis['authorizedFormOfName'] = df_preis['Preis']
-    df_preis['actorOccupations'] = "Prämierung"
+    #df_preis['authorizedFormOfName'] = df_preis['Preis']
+    #df_preis['actorOccupations'] = "Prämierung"
 
     df_wettbwewerb = mydata[['NORM Körperschaft']].drop_duplicates()
     df_wettbwewerb['authorizedFormOfName'] = df_wettbwewerb['NORM Körperschaft']
