@@ -181,6 +181,8 @@ def main():
     data['eventStartDates'] = data[['Zeitraum von', 'Datierung']].apply(lambda x: x['Datierung'] if x['Datierung'] is not np.nan else x['Zeitraum von'], axis=1).replace({r'(.*)(\d{4})(.*)' : r'\2'}, regex=True)
     data['eventEndDates'] = data[['Zeitraum bis', 'Datierung']].apply(lambda x: x['Datierung'] if x['Datierung'] is not np.nan else x['Zeitraum bis'], axis=1).replace({r'(.*)(\d{4})(.*)' : r'\2'}, regex=True)
     data['eventDates'] = data['Datierung'].replace({r'(.*)(\d{4})(.*)' : r'\2'}, regex=True)
+    data['myDates'] = data[['eventStartDates', 'eventEndDates', 'eventDates']].apply(lambda x: str(x['eventDates']).replace('.0', '') if x['eventDates'] is not np.nan else str(x['eventStartDates']).replace('.0', '') + "-" + str(x['eventEndDates']).replace('.0', ''), axis=1)
+    print(data['myDates'])
 
     ### Create eventPlaces ###
     data['eventPlaces'] = data['Ort']
@@ -201,16 +203,11 @@ def main():
     data['Schlagworte'] = data['Schlagworte'].str.replace(', ', ' (Schlagwort)|')
     data['subjectAccessPoints'] = data['subjectAccessPoints'] + "|" + data['Schlagworte'] + " (Schlagwort)"
 
-
-    ### GenreAccessPoints (Technik) ###
-    data['genre'] = data['Technik'].str.replace(', ', '|')
-    data['genreAccessPoints'] = data['genre']
-
     ### ExtentAndMedium ###
     data['extentAndMedium'] = "Technik: " + data['Technik']
 
     ### add values from field Trägermaterial
-    data['Trägermaterial'] = data['Trägermaterial'].str.replace(', ', '|')
+    data['Trägermaterial'] = data['Trägermaterial']
     data['extentAndMedium'].loc[data['Trägermaterial'].notnull() == True] = data['extentAndMedium'] + "| Trägermaterial: " + data['Trägermaterial']
 
     # add values from fields "Blattmasse (H) in cm" and "Blattmasse (B) in cm" and  "Masse (T) in cm"
@@ -222,6 +219,9 @@ def main():
 
     data['extentAndMedium'].loc[data['extent'].notnull() == True] = data['extentAndMedium'] + "| Masse: " + data['extent']
 
+    ### GenreAccessPoints (Technik) ###
+    data['genre'] = data['Technik'].str.replace(', ', '|')
+    data['genreAccessPoints'] = data['genre']
 
     ### Tags ###
     data['scope_Objekt'].loc[data['Tag(s)'].notnull() == True] = data['scope_Objekt'] + "| Tags: " + data['Tag(s)']
@@ -441,7 +441,7 @@ def main():
 
 ### authority records ###
     # authors
-    df_author = mydata[['eventActors', 'Urheber (Name, Vorname)', 'teacher', 'eventStartDates', 'eventEndDates', 'eventDates']]
+    df_author = mydata[['eventActors', 'Urheber (Name, Vorname)', 'teacher', 'myDates', 'eventStartDates', 'eventEndDates', 'eventDates']]
     df_author['authorizedFormOfName'] = df_author['eventActors'].drop_duplicates()
     df_author['parentAuthorizedFormOfName'] = df_author['eventActors']
     df_author['alternateForm'] = df_author['Urheber (Name, Vorname)']
@@ -449,8 +449,7 @@ def main():
     df_author['sourceAuthorizedFormOfName'] = df_author['eventActors']
     df_author['targetAuthorizedFormOfName'] = df_author['teacher']
 
-    df_author['datesOfExistence'] = df_author[['eventStartDates', 'eventEndDates', 'eventDates']].apply(lambda x: str(x['eventDates']) if x['eventDates'] is not np.nan else str(x['eventStartDates']) + "-" + str(x['eventEndDates']), axis=1)
-    df_author['datesOfExistence'] = df_author['datesOfExistence'].str.replace('.0', '')
+    df_author['datesOfExistence'] = df_author['myDates']
     df_author['date'] = df_author['eventDates']
     df_author['startDate'] = df_author['eventStartDates']
     df_author['endDate'] = df_author['eventEndDates']
