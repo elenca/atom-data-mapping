@@ -230,25 +230,26 @@ def main():
     ### NameAccessPoints ###
     data['Kanon'] = data['Kanon'] + " (Referenz)"
     data['nameAccessPoints'] = data['Kanon']
+    #data['nameAccessPoints'].loc[data['Kanon'].notnull() == True] = data['Kanon']
 
     ### Lehrperson ###
     data['teacher'] = data['Lehrperson (Name, Vorname)']
     data['teacher'].loc[data['NORM Lehrperson'].notnull() == True] = data['NORM Lehrperson']
     data['teacher'] = data['teacher'] + " (Lehrperson)"
-    data['nameAccessPoints'].loc[data['teacher'].notnull() == True] = data['nameAccessPoints'] + "|" + data['teacher']
+    data['nameAccessPoints'].loc[(data['nameAccessPoints'].notnull() == True) & (data['teacher'].notnull() == True)] = data['nameAccessPoints'] + "|" + data['teacher']
+    data['nameAccessPoints'].loc[data['nameAccessPoints'].notnull() == False] = data['teacher']
 
     ### Schulhaus ###
     data['school'] = data['Schulhaus']
     data['school'].loc[data['NORM SHaus'].notnull() == True] = data['NORM SHaus']
     data['school'] = data['school'] + " (Schulhaus)"
-    data['nameAccessPoints'].loc[data['school'].notnull() == True] = data['nameAccessPoints'] + "|" + data['school']
+    data['nameAccessPoints'].loc[(data['nameAccessPoints'].notnull() == True) & (data['school'].notnull() == True)] = data['nameAccessPoints'] + "|" + data['school']
+    data['nameAccessPoints'].loc[data['nameAccessPoints'].notnull() == False] = data['school']
 
     ### Körperschaft/Wettbewerb ###
     data['NORM Körperschaft'].loc[data['NORM Körperschaft'].notnull() == True] = data['NORM Körperschaft'] + " (Wettbewerb)"
-    data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints'] + "|" + data['NORM Körperschaft']
-
-    #TODO: Prüfen, ob korrekt
-    #data['nameAccessPoints'].loc[data['NORM Körperschaft'].notnull() == True] = data['nameAccessPoints']
+    data['nameAccessPoints'].loc[(data['nameAccessPoints'].notnull() == True) & (data['NORM Körperschaft'].notnull() == True)] = data['nameAccessPoints'] + "|" + data['NORM Körperschaft']
+    data['nameAccessPoints'].loc[data['nameAccessPoints'].notnull() == False] = data['NORM Körperschaft']
 
     ### Prämierung ###
     #data['nameAccessPoints'].loc[data['Preis'].notnull() == True] = data['nameAccessPoints'] + "|" + data['Preis'] + " (Prämierung)"
@@ -397,7 +398,7 @@ def main():
         #'legacyId',
         #'parentId',
         'scopeAndContent',
-        'radNotePhysicalDescription',
+        #'radNotePhysicalDescription',
         'radPublishersSeriesNote',
         'archivalHistory',
         #'alternateTitle',
