@@ -13,6 +13,9 @@ import hashlib
 def cast_value(value):
     return str(value)
 
+def float_to_int(value):
+    return pd.to_numeric(value, downcast='integer' )  if not pd.isnull(value) else value
+
 def split_it(val):
     if str(val) == 'NaN':
         return val
@@ -175,13 +178,16 @@ def main():
     # add values for "Alter" and "Schulklasse"
     data['Alter'] = data['Alter'].apply(set_age)
     data['Schulklasse'] = data['Schulklasse'].apply(set_class)
-    data['eventDescriptions'] = data['Alter'] + ", " + data['Schulklasse']
+    data['eventDescriptions'] = data['Alter']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulklasse'].notnull() == True)] = data['eventDescriptions'] + ", " + data['Schulklasse']
+    data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Schulklasse']
 
     # Set eventStartDates, eventEndDates and eventDates
     data['eventStartDates'] = data[['Zeitraum von', 'Datierung']].apply(lambda x: x['Datierung'] if x['Datierung'] is not np.nan else x['Zeitraum von'], axis=1).replace({r'(.*)(\d{4})(.*)' : r'\2'}, regex=True)
     data['eventEndDates'] = data[['Zeitraum bis', 'Datierung']].apply(lambda x: x['Datierung'] if x['Datierung'] is not np.nan else x['Zeitraum bis'], axis=1).replace({r'(.*)(\d{4})(.*)' : r'\2'}, regex=True)
     data['eventDates'] = data['Datierung'].replace({r'(.*)(\d{4})(.*)' : r'\2'}, regex=True)
     data['myDates'] = data[['eventStartDates', 'eventEndDates', 'eventDates']].apply(lambda x: str(x['eventDates']).replace('.0', '') if x['eventDates'] is not np.nan else str(x['eventStartDates']).replace('.0', '') + "-" + str(x['eventEndDates']).replace('.0', ''), axis=1)
+    print(data['eventStartDates'])
     print(data['myDates'])
 
     ### Create eventPlaces ###
@@ -299,6 +305,7 @@ def main():
     df_teilserie['extentAndMedium'] = df_teilserie['count'].apply(set_value)
     #TODO: Prüfen, ob korrekt
     df_teilserie['eventActors'].loc[df_teilserie['NORM Körperschaft'].notnull() == True] = df_teilserie['NORM Körperschaft'].apply(set_value)
+    df_teilserie['eventActors'].loc[df_teilserie['NORM Körperschaft'].notnull() == False] = ""
 
     # drop duplicates of type "Serie"
     df_teilserie = df_teilserie.drop_duplicates(subset='Teilserie', keep='first', inplace=False)
@@ -432,6 +439,7 @@ def main():
 
     # create final dataset with correct column_names
     mydata_final = mydata[column_names]
+    mydata_final['eventStartDates'] = pd.to_numeric(mydata_final['eventStartDates'], downcast='integer')
 
     # export data to csv file
     export_csv = mydata.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Jupyter_Notebook\export_df_all.csv', encoding='utf-8', index = None, header=True)
@@ -442,12 +450,12 @@ def main():
 
 ### authority records ###
     # authors
-    df_author = mydata[['eventActors', 'Urheber (Name, Vorname)', 'teacher', 'myDates', 'eventStartDates', 'eventEndDates', 'eventDates']]
-    df_author['authorizedFormOfName'] = df_author['eventActors'].drop_duplicates()
-    df_author['parentAuthorizedFormOfName'] = df_author['eventActors']
+    df_author = mydata[['author', 'Urheber (Name, Vorname)', 'teacher', 'myDates', 'eventStartDates', 'eventEndDates', 'eventDates']]
+    df_author['authorizedFormOfName'] = df_author['author'].drop_duplicates()
+    df_author['parentAuthorizedFormOfName'] = df_author['author']
     df_author['alternateForm'] = df_author['Urheber (Name, Vorname)']
 
-    df_author['sourceAuthorizedFormOfName'] = df_author['eventActors']
+    df_author['sourceAuthorizedFormOfName'] = df_author['author']
     df_author['targetAuthorizedFormOfName'] = df_author['teacher']
 
     df_author['datesOfExistence'] = df_author['myDates']
