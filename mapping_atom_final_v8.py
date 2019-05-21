@@ -281,6 +281,7 @@ def main():
     df_serie['digitalObjectP'] = df_serie['digitalObjectP'].apply(set_value)
     df_serie['hierarchyPath'] = df_serie['hierarchyPathSerie'].apply(set_value)
     df_serie['extentAndMedium'] = df_serie['count'].apply(set_value)
+    df_serie['extentAndMedium'] = df_serie['extentAndMedium'].astype(str) + " Objekte"
 
     # set the eventStartDates, eventEndDates and eventDates
     df_serie['eventStartDates'] = df_serie['ENTSTEHUNGSZEIT - VON (Stufe Kollektion)'].apply(set_value)
@@ -306,6 +307,7 @@ def main():
     df_teilserie['digitalObjectP'] = df_teilserie['digitalObjectP'].apply(set_value)
     df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPathTeilserie'].apply(set_value)
     df_teilserie['extentAndMedium'] = df_teilserie['count'].apply(set_value)
+    df_teilserie['extentAndMedium'] = df_teilserie['extentAndMedium'].astype(str) + " Objekte"
     #TODO: Prüfen, ob korrekt
     df_teilserie['eventActors'].loc[df_teilserie['NORM Körperschaft'].notnull() == True] = df_teilserie['NORM Körperschaft'].apply(set_value)
     df_teilserie['eventActors'].loc[df_teilserie['NORM Körperschaft'].notnull() == False] = ""
@@ -323,6 +325,7 @@ def main():
     df_akte['digitalObjectP'] = df_akte['digitalObjectP'].apply(set_value)
     df_akte['hierarchyPath'] = df_akte['hierarchyPathAkte'].apply(set_value)
     df_akte['extentAndMedium'] = df_akte['count'].apply(set_value)
+    df_akte['extentAndMedium'] = df_akte['extentAndMedium'].astype(str) + " Objekte"
     df_akte['eventActors'] = ""
     df_lod = df_lod.append(df_akte)
 
