@@ -246,16 +246,12 @@ def main():
     #data['nameAccessPoints'].loc[data['Kanon'].notnull() == True] = data['Kanon']
 
     ### Lehrperson ###
-    data['teacher'] = data['Lehrperson (Name, Vorname)']
-    data['teacher'].loc[data['NORM Lehrperson'].notnull() == True] = data['NORM Lehrperson']
-    data['teacher'] = data['teacher'] + " (Lehrperson)"
+    data['teacher'] = data['NORM Lehrperson'] + " (Lehrperson)"
     data['nameAccessPoints'].loc[(data['nameAccessPoints'].notnull() == True) & (data['teacher'].notnull() == True)] = data['nameAccessPoints'] + "|" + data['teacher']
     data['nameAccessPoints'].loc[data['nameAccessPoints'].notnull() == False] = data['teacher']
 
     ### Schulhaus ###
-    data['school'] = data['Schulhaus']
-    data['school'].loc[data['NORM SHaus'].notnull() == True] = data['NORM SHaus']
-    data['school'] = data['school'] + " (Schulhaus)"
+    data['school'] = data['NORM SHaus'] + " (Schulhaus)"
     data['nameAccessPoints'].loc[(data['nameAccessPoints'].notnull() == True) & (data['school'].notnull() == True)] = data['nameAccessPoints'] + "|" + data['school']
     data['nameAccessPoints'].loc[data['nameAccessPoints'].notnull() == False] = data['school']
 
