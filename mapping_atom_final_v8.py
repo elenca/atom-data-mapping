@@ -179,8 +179,15 @@ def main():
     data['Alter'] = data['Alter'].apply(set_age)
     data['Schulklasse'] = data['Schulklasse'].apply(set_class)
     data['eventDescriptions'] = data['Alter']
+    data['Schulhaus'] = data['Schulhaus'] + " (Schulhaus)"
+    data['Lehrperson (Name, Vorname)'] = data['Lehrperson (Name, Vorname)'] + " (Lehrperson)"
+
     data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulklasse'].notnull() == True)] = data['eventDescriptions'] + ", " + data['Schulklasse']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Schulklasse']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulhaus'].notnull() == True)] = data['eventDescriptions'] + ", " + data['Schulhaus']
+    data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Schulhaus']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Lehrperson (Name, Vorname)'].notnull() == True)] = data['eventDescriptions'] + ", " + data['Lehrperson (Name, Vorname)']
+    data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Lehrperson (Name, Vorname)']
 
     # Set eventStartDates, eventEndDates and eventDates
     data['eventStartDates'] = data[['Zeitraum von', 'Datierung']].apply(lambda x: x['Datierung'] if x['Datierung'] is not np.nan else x['Zeitraum von'], axis=1).replace({r'(.*)(\d{4})(.*)' : r'\2'}, regex=True)
