@@ -83,7 +83,7 @@ def set_organisation(value):
 def main():
     """Summary"""
 
-    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Jupyter_Notebook/Ingest_Atom_20190510-csv.csv"
+    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Jupyter_Notebook/Ingest_Atom_20190605-csv.csv"
     data = pd.read_csv(path_to_file, encoding='utf-8', index_col=False)
 
 ### data preparation ###
@@ -168,8 +168,8 @@ def main():
     # create new field "gender"
     # create new field "author" 
     # merge gender with hash for author
-    data['gender'] = data['Geschlecht'].apply(set_gender)
-    data['author'] = "Pseudonym"+ "-" + data['author_id'].apply(cast_value)
+    data['gender'] = data['Geschlecht'].apply(set_gender) + " (Geschlecht)"
+    data['author'] = "Pseudonym-" + data['author_id'].apply(cast_value)
 
     data['eventTypes'] = "Herstellung"
     data['eventActors'] = data['author']
@@ -182,13 +182,13 @@ def main():
     data['Lehrperson (Name, Vorname)'] = data['Lehrperson (Name, Vorname)'] + " (Lehrperson)"
 
     data['eventDescriptions'] = data['gender']
-    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Alter'].notnull() == True)] = data['eventDescriptions'] + "; " + data['Alter']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Alter'].notnull() == True)] = data['eventDescriptions'] + "/ " + data['Alter']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Alter']
-    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulklasse'].notnull() == True)] = data['eventDescriptions'] + "; " + data['Schulklasse']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulklasse'].notnull() == True)] = data['eventDescriptions'] + "/ " + data['Schulklasse']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Schulklasse']
-    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulhaus'].notnull() == True)] = data['eventDescriptions'] + "; " + data['Schulhaus']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulhaus'].notnull() == True)] = data['eventDescriptions'] + "/ " + data['Schulhaus']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Schulhaus']
-    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Lehrperson (Name, Vorname)'].notnull() == True)] = data['eventDescriptions'] + "; " + data['Lehrperson (Name, Vorname)']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Lehrperson (Name, Vorname)'].notnull() == True)] = data['eventDescriptions'] + "/ " + data['Lehrperson (Name, Vorname)']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Lehrperson (Name, Vorname)']
 
     # Set eventStartDates, eventEndDates and eventDates
