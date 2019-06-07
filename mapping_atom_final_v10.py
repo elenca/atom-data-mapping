@@ -182,13 +182,13 @@ def main():
     data['Lehrperson (Name, Vorname)'] = data['Lehrperson (Name, Vorname)'] + " (Lehrperson)"
 
     data['eventDescriptions'] = data['gender']
-    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Alter'].notnull() == True)] = data['eventDescriptions'] + "/ " + data['Alter']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Alter'].notnull() == True)] = data['eventDescriptions'] + ", " + data['Alter']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Alter']
-    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulklasse'].notnull() == True)] = data['eventDescriptions'] + "/ " + data['Schulklasse']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulklasse'].notnull() == True)] = data['eventDescriptions'] + ", " + data['Schulklasse']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Schulklasse']
-    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulhaus'].notnull() == True)] = data['eventDescriptions'] + "/ " + data['Schulhaus']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Schulhaus'].notnull() == True)] = data['eventDescriptions'] + ", " + data['Schulhaus']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Schulhaus']
-    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Lehrperson (Name, Vorname)'].notnull() == True)] = data['eventDescriptions'] + "/ " + data['Lehrperson (Name, Vorname)']
+    data['eventDescriptions'].loc[(data['eventDescriptions'].notnull() == True) & (data['Lehrperson (Name, Vorname)'].notnull() == True)] = data['eventDescriptions'] + ", " + data['Lehrperson (Name, Vorname)']
     data['eventDescriptions'].loc[data['eventDescriptions'].notnull() == False] = data['Lehrperson (Name, Vorname)']
 
     # Set eventStartDates, eventEndDates and eventDates
