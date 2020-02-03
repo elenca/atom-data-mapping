@@ -1555,29 +1555,16 @@
     "description": "Create column Path at index 4 based on column Teilserie using expression grel:\"Bestand zu \" + value + \"/Teilbestand zu \" + value + \"/Serie zu \" + value"
   },
   {
-    "op": "core/text-transform",
+    "op": "core/column-addition",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "Verlag",
-    "expression": "grel:value.replace(',',';')",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column Verlag using expression grel:value.replace(',',';')"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "columnName": "Urheberrecht",
-    "expression": "grel:value.replace(',',';')",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column Urheberrecht using expression grel:value.replace(',',';')"
+    "baseColumnName": "Zeitraum bis",
+    "expression": "grel:if(isBlank(value)==true, cells['Zeitraum von'].value, \"\")",
+    "onError": "set-to-blank",
+    "newColumnName": "Datierung",
+    "columnInsertIndex": 31,
+    "description": "Create column Datierung at index 31 based on column Zeitraum bis using expression grel:if(isBlank(value)==true, cells['Zeitraum von'].value, \"\")"
   }
 ]
