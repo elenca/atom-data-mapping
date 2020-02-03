@@ -123,6 +123,992 @@
     "description": "Remove column Content"
   },
   {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "700",
+                "l": "700"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value + \", \" + if(cells['Col $b']!=null,cells['Col $b'].value,\"\") + \", \" + if(cells['Col $c']!=null,cells['Col $c'].value,\"\") + \", \" + if(cells['Col $d']!=null,cells['Col $d'].value,\"\")",
+    "onError": "set-to-blank",
+    "newColumnName": "AnmerkungTitel",
+    "columnInsertIndex": 4,
+    "description": "Create column AnmerkungTitel at index 4 based on column Col $a using expression grel:value + \", \" + if(cells['Col $b']!=null,cells['Col $b'].value,\"\") + \", \" + if(cells['Col $c']!=null,cells['Col $c'].value,\"\") + \", \" + if(cells['Col $d']!=null,cells['Col $d'].value,\"\")"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "650",
+                "l": "650"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Schlagworte",
+    "columnInsertIndex": 4,
+    "description": "Create column Schlagworte at index 4 based on column Col $a using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "650",
+                "l": "650"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $b",
+    "expression": "grel:\"GND Sachbegriff: \" + value",
+    "onError": "set-to-blank",
+    "newColumnName": "Notizen (intern)",
+    "columnInsertIndex": 7,
+    "description": "Create column Notizen (intern) at index 7 based on column Col $b using expression grel:\"GND Sachbegriff: \" + value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "651",
+                "l": "651"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "AbgebildeterOrt",
+    "columnInsertIndex": 4,
+    "description": "Create column AbgebildeterOrt at index 4 based on column Col $a using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "651",
+                "l": "651"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $b",
+    "expression": "grel:\"GND Geographisches Schlagwort: \" + value",
+    "onError": "set-to-blank",
+    "newColumnName": "Notizen (intern)2",
+    "columnInsertIndex": 8,
+    "description": "Create column Notizen (intern)2 at index 8 based on column Col $b using expression grel:\"GND Geographisches Schlagwort: \" + value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "610",
+                "l": "610"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Herstellung",
+    "columnInsertIndex": 4,
+    "description": "Create column Herstellung at index 4 based on column Col $a using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "610",
+                "l": "610"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $b",
+    "expression": "grel:\"GND Körperschaft: \" + value",
+    "onError": "set-to-blank",
+    "newColumnName": "Notizen (intern)3",
+    "columnInsertIndex": 9,
+    "description": "Create column Notizen (intern)3 at index 9 based on column Col $b using expression grel:\"GND Körperschaft: \" + value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "856",
+                "l": "856"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Url",
+    "columnInsertIndex": 4,
+    "description": "Create column Url at index 4 based on column Col $a using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "856",
+                "l": "856"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value.split(\"/\")[3]",
+    "onError": "set-to-blank",
+    "newColumnName": "Signatur",
+    "columnInsertIndex": 4,
+    "description": "Create column Signatur at index 4 based on column Col $a using expression grel:value.split(\"/\")[3]"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "540",
+                "l": "540"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Urheberrecht",
+    "columnInsertIndex": 4,
+    "description": "Create column Urheberrecht at index 4 based on column Col $a using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "500",
+                "l": "500"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Teilserie",
+    "expression": "grel:if(isBlank(value)==true, cells['Col $a'].value, \"\")",
+    "onError": "set-to-blank",
+    "newColumnName": "Beschreibung",
+    "columnInsertIndex": 3,
+    "description": "Create column Beschreibung at index 3 based on column Teilserie using expression grel:if(isBlank(value)==true, cells['Col $a'].value, \"\")"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "340",
+                "l": "340"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value + \"; \" + cells['Col $b'].value",
+    "onError": "set-to-blank",
+    "newColumnName": "Medium/Typ",
+    "columnInsertIndex": 5,
+    "description": "Create column Medium/Typ at index 5 based on column Col $a using expression grel:value + \"; \" + cells['Col $b'].value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "300",
+                "l": "300"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value + \"; projizierbar; unbewegtes Bild\"",
+    "onError": "set-to-blank",
+    "newColumnName": "Trägermaterial",
+    "columnInsertIndex": 5,
+    "description": "Create column Trägermaterial at index 5 based on column Col $a using expression grel:value + \"; projizierbar; unbewegtes Bild\""
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "300",
+                "l": "300"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $b",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Technik",
+    "columnInsertIndex": 15,
+    "description": "Create column Technik at index 15 based on column Col $b using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "300",
+                "l": "300"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $c",
+    "expression": "grel:\"Masse: \" + value",
+    "onError": "set-to-blank",
+    "newColumnName": "Masse",
+    "columnInsertIndex": 20,
+    "description": "Create column Masse at index 20 based on column Col $c using expression grel:\"Masse: \" + value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "264",
+                "l": "264"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Ort",
+    "columnInsertIndex": 5,
+    "description": "Create column Ort at index 5 based on column Col $a using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "264",
+                "l": "264"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $b",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Verlag",
+    "columnInsertIndex": 16,
+    "description": "Create column Verlag at index 16 based on column Col $b using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "264",
+                "l": "264"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $c",
+    "expression": "grel:value.find(/\\d{4}/)[1]",
+    "onError": "set-to-blank",
+    "newColumnName": "Zeitraum bis",
+    "columnInsertIndex": 22,
+    "description": "Create column Zeitraum bis at index 22 based on column Col $c using expression grel:value.find(/\\d{4}/)[1]"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "264",
+                "l": "264"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $c",
+    "expression": "grel:value.find(/\\d{4}/)[0]",
+    "onError": "set-to-blank",
+    "newColumnName": "Zeitraum von",
+    "columnInsertIndex": 22,
+    "description": "Create column Zeitraum von at index 22 based on column Col $c using expression grel:value.find(/\\d{4}/)[0]"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "246",
+                "l": "246"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value + if(cells['Col $b']!=null,\"; \"+cells['Col $b'].value,\"\")",
+    "onError": "set-to-blank",
+    "newColumnName": "Notizen",
+    "columnInsertIndex": 5,
+    "description": "Create column Notizen at index 5 based on column Col $a using expression grel:value + if(cells['Col $b']!=null,\"; \"+cells['Col $b'].value,\"\")"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "245",
+                "l": "245"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Titel",
+    "columnInsertIndex": 5,
+    "description": "Create column Titel at index 5 based on column Col $a using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "245",
+                "l": "245"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $b",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "AlternativerTitel",
+    "columnInsertIndex": 18,
+    "description": "Create column AlternativerTitel at index 18 based on column Col $b using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "100",
+                "l": "100"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $a",
+    "expression": "grel:value",
+    "onError": "set-to-blank",
+    "newColumnName": "Urheber",
+    "columnInsertIndex": 5,
+    "description": "Create column Urheber at index 5 based on column Col $a using expression grel:value"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "100",
+                "l": "100"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $b",
+    "expression": "grel:if(value==\"Fotograf\",value,\"\")",
+    "onError": "set-to-blank",
+    "newColumnName": "actorOccupations",
+    "columnInsertIndex": 19,
+    "description": "Create column actorOccupations at index 19 based on column Col $b using expression grel:if(value==\"Fotograf\",value,\"\")"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "100",
+                "l": "100"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $b",
+    "expression": "grel:value.find(/\\d{4}-\\d{4}/)[0]",
+    "onError": "set-to-blank",
+    "newColumnName": "datesOfExistence",
+    "columnInsertIndex": 19,
+    "description": "Create column datesOfExistence at index 19 based on column Col $b using expression grel:value.find(/\\d{4}-\\d{4}/)[0]"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "100",
+                "l": "100"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Col $c",
+    "expression": "grel:value.find(/\\(.*?\\).*/)[0]",
+    "onError": "set-to-blank",
+    "newColumnName": "actorGND",
+    "columnInsertIndex": 28,
+    "description": "Create column actorGND at index 28 based on column Col $c using expression grel:value.find(/\\(.*?\\).*/)[0]"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "100",
+                "l": "100"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "columnName": "actorOccupations",
+    "expression": "grel:\"Fotograf\"",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column actorOccupations using expression grel:\"Fotograf\""
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "FMT",
+                "l": "FMT"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Record",
+    "expression": "grel:cells['Record'].value",
+    "onError": "set-to-blank",
+    "newColumnName": "ID",
+    "columnInsertIndex": 1,
+    "description": "Create column ID at index 1 based on column Record using expression grel:cells['Record'].value"
+  },
+  {
+    "op": "core/column-move",
+    "columnName": "ID",
+    "index": 0,
+    "description": "Move column ID to position 0"
+  },
+  {
+    "op": "core/row-removal",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "CAT",
+                "l": "CAT"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "description": "Remove rows"
+  },
+  {
+    "op": "core/row-removal",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "MarcTag",
+          "expression": "value",
+          "columnName": "MarcTag",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "LDR",
+                "l": "LDR"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "description": "Remove rows"
+  },
+  {
     "op": "core/row-removal",
     "engineConfig": {
       "facets": [
@@ -263,35 +1249,28 @@
     "description": "Remove rows"
   },
   {
-    "op": "core/row-removal",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "CAT",
-                "l": "CAT"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "description": "Remove rows"
+    "op": "core/multivalued-cell-join",
+    "columnName": "Teilserie",
+    "keyColumnName": "ID",
+    "separator": ", ",
+    "description": "Join multi-valued cells in column Teilserie"
   },
   {
-    "op": "core/row-removal",
+    "op": "core/multivalued-cell-join",
+    "columnName": "Beschreibung",
+    "keyColumnName": "ID",
+    "separator": ", ",
+    "description": "Join multi-valued cells in column Beschreibung"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Urheber",
+    "keyColumnName": "ID",
+    "separator": ", ",
+    "description": "Join multi-valued cells in column Urheber"
+  },
+  {
+    "op": "core/mass-edit",
     "engineConfig": {
       "facets": [
         {
@@ -316,7 +1295,210 @@
       ],
       "mode": "row-based"
     },
-    "description": "Remove rows"
+    "columnName": "Urheber",
+    "expression": "value",
+    "edits": [
+      {
+        "from": [],
+        "fromBlank": true,
+        "fromError": false,
+        "to": "Anonyme/r Fotograf/in"
+      }
+    ],
+    "description": "Mass edit cells in column Urheber"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Titel",
+    "keyColumnName": "ID",
+    "separator": ", ",
+    "description": "Join multi-valued cells in column Titel"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Notizen",
+    "keyColumnName": "ID",
+    "separator": ", ",
+    "description": "Join multi-valued cells in column Notizen"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Ort",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Ort"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Trägermaterial",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Trägermaterial"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Medium/Typ",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Medium/Typ"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Urheberrecht",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Urheberrecht"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Signatur",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Signatur"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Url",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Url"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Herstellung",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Herstellung"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "AbgebildeterOrt",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column AbgebildeterOrt"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Schlagworte",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Schlagworte"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "AnmerkungTitel",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column AnmerkungTitel"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "datesOfExistence",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column datesOfExistence"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "actorOccupations",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column actorOccupations"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "AlternativerTitel",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column AlternativerTitel"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Verlag",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Verlag"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Technik",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Technik"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Notizen (intern)3",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Notizen (intern)3"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Notizen (intern)2",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Notizen (intern)2"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Notizen (intern)",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Notizen (intern)"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "actorGND",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column actorGND"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Zeitraum von",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Zeitraum von"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Zeitraum bis",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Zeitraum bis"
+  },
+  {
+    "op": "core/multivalued-cell-join",
+    "columnName": "Masse",
+    "keyColumnName": "ID",
+    "separator": ";",
+    "description": "Join multi-valued cells in column Masse"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "Col $a",
+    "description": "Remove column Col $a"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "Col $b",
+    "description": "Remove column Col $b"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "Col $c",
+    "description": "Remove column Col $c"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "Col $d",
+    "description": "Remove column Col $d"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "Col $e",
+    "description": "Remove column Col $e"
   },
   {
     "op": "core/row-removal",
@@ -327,14 +1509,14 @@
           "name": "MarcTag",
           "expression": "value",
           "columnName": "MarcTag",
-          "invert": false,
+          "invert": true,
           "omitBlank": false,
           "omitError": false,
           "selection": [
             {
               "v": {
-                "v": "LDR",
-                "l": "LDR"
+                "v": "FMT",
+                "l": "FMT"
               }
             }
           ],
@@ -349,519 +1531,53 @@
   {
     "op": "core/column-addition",
     "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "100",
-                "l": "100"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
+      "facets": [],
       "mode": "row-based"
     },
-    "baseColumnName": "Col $a",
-    "expression": "grel:value",
+    "baseColumnName": "Notizen (intern)",
+    "expression": "grel:if(cells['Notizen']!=null, cells['Notizen'].value +\"; \",\"\") + value + \"; \" + if(cells['Notizen (intern)2']!=null,cells['Notizen (intern)2'].value +\"; \",\"\") + if(cells['Notizen (intern)3']!=null,cells['Notizen (intern)3'].value +\"; \",\"\")",
     "onError": "set-to-blank",
-    "newColumnName": "Urheber (Name, Vorname)",
+    "newColumnName": "Notizen (intern)1",
+    "columnInsertIndex": 26,
+    "description": "Create column Notizen (intern)1 at index 26 based on column Notizen (intern) using expression grel:if(cells['Notizen']!=null, cells['Notizen'].value +\"; \",\"\") + value + \"; \" + if(cells['Notizen (intern)2']!=null,cells['Notizen (intern)2'].value +\"; \",\"\") + if(cells['Notizen (intern)3']!=null,cells['Notizen (intern)3'].value +\"; \",\"\")"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Teilserie",
+    "expression": "grel:\"Bestand zu \" + value + \"/Teilbestand zu \" + value + \"/Serie zu \" + value",
+    "onError": "set-to-blank",
+    "newColumnName": "Path",
     "columnInsertIndex": 4,
-    "description": "Create column Urheber (Name, Vorname) at index 4 based on column Col $a using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "100",
-                "l": "100"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        },
-        {
-          "type": "list",
-          "name": "Col $b",
-          "expression": "value",
-          "columnName": "Col $b",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "Fotograf",
-                "l": "Fotograf"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $b",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "Urheber,actorOccupations",
-    "columnInsertIndex": 6,
-    "description": "Create column Urheber,actorOccupations at index 6 based on column Col $b using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "100",
-                "l": "100"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        },
-        {
-          "type": "list",
-          "name": "Col $b",
-          "expression": "value",
-          "columnName": "Col $b",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "1882-1960",
-                "l": "1882-1960"
-              }
-            },
-            {
-              "v": {
-                "v": "1911-1996",
-                "l": "1911-1996"
-              }
-            },
-            {
-              "v": {
-                "v": "1888-1969",
-                "l": "1888-1969"
-              }
-            },
-            {
-              "v": {
-                "v": "1864-1949",
-                "l": "1864-1949"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $b",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "Urheber,datesOfExistence",
-    "columnInsertIndex": 6,
-    "description": "Create column Urheber,datesOfExistence at index 6 based on column Col $b using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "245",
-                "l": "245"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $a",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "Titel",
-    "columnInsertIndex": 4,
-    "description": "Create column Titel at index 4 based on column Col $a using expression grel:value"
+    "description": "Create column Path at index 4 based on column Teilserie using expression grel:\"Bestand zu \" + value + \"/Teilbestand zu \" + value + \"/Serie zu \" + value"
   },
   {
     "op": "core/text-transform",
     "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "245",
-                "l": "245"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
+      "facets": [],
       "mode": "row-based"
     },
-    "columnName": "Col $b",
-    "expression": "grel:if(isBlank(value)==true,' ', value)",
+    "columnName": "Verlag",
+    "expression": "grel:value.replace(',',';')",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10,
-    "description": "Text transform on cells in column Col $b using expression grel:if(isBlank(value)==true,' ', value)"
+    "description": "Text transform on cells in column Verlag using expression grel:value.replace(',',';')"
   },
   {
     "op": "core/text-transform",
     "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "245",
-                "l": "245"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
+      "facets": [],
       "mode": "row-based"
     },
-    "columnName": "Titel",
-    "expression": "grel:value + \" \" + cells['Col $b'].value",
+    "columnName": "Urheberrecht",
+    "expression": "grel:value.replace(',',';')",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10,
-    "description": "Text transform on cells in column Titel using expression grel:value + \" \" + cells['Col $b'].value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "264",
-                "l": "264"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $a",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "Ort",
-    "columnInsertIndex": 4,
-    "description": "Create column Ort at index 4 based on column Col $a using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "264",
-                "l": "264"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $b",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "Akteur",
-    "columnInsertIndex": 8,
-    "description": "Create column Akteur at index 8 based on column Col $b using expression grel:value"
-  },
-  {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "264",
-                "l": "264"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "columnName": "Col $c",
-    "expression": "grel:value.find(/\\d{4}/).join(\"-\")",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Text transform on cells in column Col $c using expression grel:value.find(/\\d{4}/).join(\"-\")"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "264",
-                "l": "264"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $c",
-    "expression": "grel:value.find(/\\d{4}/)[0]",
-    "onError": "set-to-blank",
-    "newColumnName": "Zeitraum von",
-    "columnInsertIndex": 12,
-    "description": "Create column Zeitraum von at index 12 based on column Col $c using expression grel:value.find(/\\d{4}/)[0]"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "264",
-                "l": "264"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $c",
-    "expression": "grel:value.find(/\\d{4}/)[1]",
-    "onError": "set-to-blank",
-    "newColumnName": "Zeitraum bis",
-    "columnInsertIndex": 12,
-    "description": "Create column Zeitraum bis at index 12 based on column Col $c using expression grel:value.find(/\\d{4}/)[1]"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "300",
-                "l": "300"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $a",
-    "expression": "grel:value + \", projizierbar, unbewegtes Bild\"",
-    "onError": "set-to-blank",
-    "newColumnName": "Trägermaterial",
-    "columnInsertIndex": 4,
-    "description": "Create column Trägermaterial at index 4 based on column Col $a using expression grel:value + \", projizierbar, unbewegtes Bild\""
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "300",
-                "l": "300"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $b",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "Technik",
-    "columnInsertIndex": 9,
-    "description": "Create column Technik at index 9 based on column Col $b using expression grel:value"
-  },
-  {
-    "op": "core/column-addition",
-    "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "MarcTag",
-          "expression": "value",
-          "columnName": "MarcTag",
-          "invert": false,
-          "omitBlank": false,
-          "omitError": false,
-          "selection": [
-            {
-              "v": {
-                "v": "300",
-                "l": "300"
-              }
-            }
-          ],
-          "selectBlank": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
-    },
-    "baseColumnName": "Col $c",
-    "expression": "grel:value",
-    "onError": "set-to-blank",
-    "newColumnName": "Masse",
-    "columnInsertIndex": 14,
-    "description": "Create column Masse at index 14 based on column Col $c using expression grel:value"
+    "description": "Text transform on cells in column Urheberrecht using expression grel:value.replace(',',';')"
   }
 ]
