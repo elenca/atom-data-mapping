@@ -1548,11 +1548,11 @@
       "mode": "row-based"
     },
     "baseColumnName": "Teilserie",
-    "expression": "grel:\"Bestand zu \" + value + \"/Teilbestand zu \" + value + \"/Serie zu \" + value",
+    "expression": "grel:\"Bestand zu \" + value + \"/Teilbestand zu \" + value + \"/Gruppe zu \" + value + \"/Serie zu \" + value",
     "onError": "set-to-blank",
     "newColumnName": "Path",
     "columnInsertIndex": 4,
-    "description": "Create column Path at index 4 based on column Teilserie using expression grel:\"Bestand zu \" + value + \"/Teilbestand zu \" + value + \"/Serie zu \" + value"
+    "description": "Create column Path at index 4 based on column Teilserie using expression grel:\"Bestand zu \" + value + \"/Teilbestand zu \" + value + \"/Gruppe zu \" + value + \"/Serie zu \" + value"
   },
   {
     "op": "core/column-addition",
