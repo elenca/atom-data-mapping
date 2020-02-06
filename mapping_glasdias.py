@@ -49,11 +49,13 @@ def set_organisation(value):
 def main():
     """Summary"""
 
-    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Glasdias/glasdias_full_final4.csv"
+    path_to_file = "D:/mastranelena/Desktop/Pestalozzianum/Glasdias/Export2/glasdias_full_noexp-txt.csv"
     data = pd.read_csv(path_to_file, encoding='utf-8', index_col=False)
 
 ### data preparation ###
-    data['scope_Serie'] = "Keine Angaben"
+    data['Bestand'] = "Bestand zu " + data['Teilserie']
+    data['Teilbestand'] = "Teilbestand zu " + data['Teilserie']
+    data['Gruppe'] = "Gruppe zu " + data['Teilserie']
 
     # merge title column with alternate title    
     data['Titel'].loc[data['AlternativerTitel'].notnull() == True] = data['Titel'] + "/[" + data['Titel'] + " " + data['AlternativerTitel'] + "]"
@@ -74,7 +76,10 @@ def main():
     data['Teilbestand'] = data['Path'].apply(split_column, number=(1))
 
     # create column for level "Serie"
-    data['Serie'] = data['Path'].apply(split_column, number=(2))
+    data['Gruppe'] = data['Path'].apply(split_column, number=(2))
+
+    # create column for level "Serie"
+    data['Serie'] = data['Path'].apply(split_column, number=(3))
 
     ### LevelOfDescription (lod)
     data['lod'] = "Objekt"
@@ -113,10 +118,13 @@ def main():
     data['hierarchyPath'] = data['hierarchyPath'] + "/1_" + data['Teilbestand']
     data['hierarchyPathTeilbestand'] = data['hierarchyPath']
 
-    data['hierarchyPath'] = data['hierarchyPath'] + "/2_" + data['Serie']
+    data['hierarchyPath'] = data['hierarchyPath'] + "/2_" + data['Gruppe']
     data['hierarchyPathSerie'] = data['hierarchyPath']
 
-    data['hierarchyPath'].loc[data['Teilserie'].notnull() == True] = data['hierarchyPath'] + "/3_" + data['Teilserie']
+    data['hierarchyPath'] = data['hierarchyPath'] + "/3_" + data['Serie']
+    data['hierarchyPathSerie'] = data['hierarchyPath']
+
+    data['hierarchyPath'].loc[data['Teilserie'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Teilserie']
     data['hierarchyPathTeilserie'] = data['hierarchyPath']
 
     #data['hierarchyPath'].loc[data['Akte'].notnull() == True] = data['hierarchyPath'] + "/4_" + data['Akte']
@@ -124,13 +132,14 @@ def main():
 
     ### Count values for ExtentAndMedium
     #data['countTeilbestand'] = data.groupby('hierarchyPathTeilbestand')['hierarchyPathTeilbestand'].transform('countTeilbestand')
+    data['count'] = data.groupby('Bestand')['Bestand'].transform('count')
+    data['count'] = data.groupby('Teilbestand')['Teilbestand'].transform('count')
+    data['count'] = data.groupby('Gruppe')['Gruppe'].transform('count')
     data['count'] = data.groupby('Serie')['Serie'].transform('count')
     data['count'].loc[data['Teilserie'].notnull() == True] = data.groupby('Teilserie')['Teilserie'].transform('count')
     #data['count'].loc[data['Akte'].notnull() == True] = data.groupby('Akte')['Akte'].transform('count')
 
     ### Author
-    # create new field "author_id"
-    # set hash for author
     data['author'] = data['Urheber']
 
     data['eventTypes'] = "Herstellung"
@@ -190,17 +199,17 @@ def main():
     #data['scope_Objekt'].loc[data['scope_Objekt'].notnull() == False] = "Tags: " + data['Tag(s)']
 
     ### NameAccessPoints ###
-    data['nameAccessPoints'] = np.NaN
     #data['Kanon'] = data['Kanon'] + " (Referenz)"
     #data['nameAccessPoints'] = data['Kanon']
     #data['nameAccessPoints'].loc[data['Kanon'].notnull() == True] = data['Kanon']
 
-    ### Lehrperson ###
+    ### Lehrperson resp. Herstellung ###
     data['teacher'] = data['Herstellung']
-    data['nameAccessPoints'].loc[(data['nameAccessPoints'].notnull() == True) & (data['teacher'].notnull() == True)] = data['nameAccessPoints'] + "|" + data['teacher']
-    data['nameAccessPoints'].loc[data['nameAccessPoints'].notnull() == False] = data['teacher']
+    #data['nameAccessPoints'].loc[(data['nameAccessPoints'].notnull() == True) & (data['teacher'].notnull() == True)] = data['nameAccessPoints'] + "|" + data['teacher']
+    #data['nameAccessPoints'].loc[data['nameAccessPoints'].notnull() == False] = data['teacher']
+    data['nameAccessPoints'] = data['teacher']
 
-    ### Schulhaus ###
+    ### Schulhaus resp. Verlag ###
     data['school'] = data['Verlag']
     data['nameAccessPoints'].loc[(data['nameAccessPoints'].notnull() == True) & (data['school'].notnull() == True)] = data['nameAccessPoints'] + "|" + data['school']
     data['nameAccessPoints'].loc[data['nameAccessPoints'].notnull() == False] = data['school']
@@ -222,14 +231,102 @@ def main():
 ### levels of description ###
     df_sub = data.drop_duplicates(subset='hierarchyPath', keep='first', inplace=False)
 
+    # create a dataframe for the level "Bestand" and append it to the dataframe "df_lod"
+    # set the levelOfDescription, title and scopeAndContent
+    df_sub['lod'] = df_sub['Bestand'].apply(set_level, level=('0Bestand'))
+    df_Bestand = df_sub.loc[df_sub['lod'] == '0Bestand']
+    df_Bestand['title'] = df_Bestand['Bestand'].apply(set_value)
+    #df_Bestand['scopeAndContent'] = df_Bestand['scope_Bestand'].apply(set_value)
+    df_Bestand['digitalObjectP'] = df_Bestand['digitalObjectP'].apply(set_value)
+    df_Bestand['hierarchyPath'] = df_Bestand['hierarchyPathSerie'].apply(set_value)
+    # set the count value as the number of objects at group level
+    df_Bestand['extentAndMedium'] = df_Bestand['count'].apply(set_value)
+    df_Bestand['extentAndMedium'] = df_Bestand['extentAndMedium'].astype(str) + " Objekte"
+
+    # set the eventStartDates, eventEndDates and eventDates
+    df_Bestand['eventStartDates'] = np.nan
+    df_Bestand['eventEndDates'] = np.nan
+    df_Bestand['eventDates'] = np.nan
+
+    # set the "Medium", "Provenienz" and "Besitzvermerk"
+    df_Bestand['radGeneralMaterialDesignation'] = df_Bestand['Medium/Typ'].apply(set_value)
+    df_Bestand['eventActors'] = df_Bestand['Urheberrecht'].apply(set_value)
+    #df_Bestand['eventActors'] = df_Bestand['PROVENIENZ (Stufe Kollektion)'].apply(set_value)
+    df_Bestand['archivalHistory'] = df_Bestand['AnmerkungTitel'].apply(set_value)
+
+    # drop duplicates of type "Serie"
+    df_Bestand = df_Bestand.drop_duplicates(subset='Bestand', keep='first', inplace=False)
+
+    # append the level "Serie" to a new dataframe "df_lod"
+    df_lod = df_Bestand
+
+    # create a dataframe for the level "Teilbestand" and append it to the dataframe "df_lod"
+    # set the levelOfDescription, title and scopeAndContent
+    df_sub['lod'] = df_sub['Teilbestand'].apply(set_level, level=('1Teilbestand'))
+    df_Teilbestand = df_sub.loc[df_sub['lod'] == '1Teilbestand']
+    df_Teilbestand['title'] = df_Teilbestand['Teilbestand'].apply(set_value)
+    #df_Teilbestand['scopeAndContent'] = df_Teilbestand['scope_Teilbestand'].apply(set_value)
+    df_Teilbestand['digitalObjectP'] = df_Teilbestand['digitalObjectP'].apply(set_value)
+    df_Teilbestand['hierarchyPath'] = df_Teilbestand['hierarchyPathSerie'].apply(set_value)
+    # set the count value as the number of objects at group level
+    df_Teilbestand['extentAndMedium'] = df_Teilbestand['count'].apply(set_value)
+    df_Teilbestand['extentAndMedium'] = df_Teilbestand['extentAndMedium'].astype(str) + " Objekte"
+
+    # set the eventStartDates, eventEndDates and eventDates
+    df_Teilbestand['eventStartDates'] = np.nan
+    df_Teilbestand['eventEndDates'] = np.nan
+    df_Teilbestand['eventDates'] = np.nan
+
+    # set the "Medium", "Provenienz" and "Besitzvermerk"
+    df_Teilbestand['radGeneralMaterialDesignation'] = df_Teilbestand['Medium/Typ'].apply(set_value)
+    df_Teilbestand['eventActors'] = df_Teilbestand['Urheberrecht'].apply(set_value)
+    #df_Teilbestand['eventActors'] = df_Teilbestand['PROVENIENZ (Stufe Kollektion)'].apply(set_value)
+    df_Teilbestand['archivalHistory'] = df_Teilbestand['AnmerkungTitel'].apply(set_value)
+
+    # drop duplicates of type "Serie"
+    df_Teilbestand = df_Teilbestand.drop_duplicates(subset='Teilbestand', keep='first', inplace=False)
+
+    # append the level "Serie" to a new dataframe "df_lod"
+    df_lod = df_lod.append(df_Teilbestand)
+
+    # create a dataframe for the level "Gruppe" and append it to the dataframe "df_lod"
+    # set the levelOfDescription, title and scopeAndContent
+    df_sub['lod'] = df_sub['Gruppe'].apply(set_level, level=('2Gruppe'))
+    df_Gruppe = df_sub.loc[df_sub['lod'] == '2Gruppe']
+    df_Gruppe['title'] = df_Gruppe['Gruppe'].apply(set_value)
+    #df_Gruppe['scopeAndContent'] = df_Gruppe['scope_Gruppe'].apply(set_value)
+    df_Gruppe['digitalObjectP'] = df_Gruppe['digitalObjectP'].apply(set_value)
+    df_Gruppe['hierarchyPath'] = df_Gruppe['hierarchyPathSerie'].apply(set_value)
+    # set the count value as the number of objects at group level
+    df_Gruppe['extentAndMedium'] = df_Gruppe['count'].apply(set_value)
+    df_Gruppe['extentAndMedium'] = df_Gruppe['extentAndMedium'].astype(str) + " Objekte"
+
+    # set the eventStartDates, eventEndDates and eventDates
+    df_Gruppe['eventStartDates'] = np.nan
+    df_Gruppe['eventEndDates'] = np.nan
+    df_Gruppe['eventDates'] = np.nan
+
+    # set the "Medium", "Provenienz" and "Besitzvermerk"
+    df_Gruppe['radGeneralMaterialDesignation'] = df_Gruppe['Medium/Typ'].apply(set_value)
+    df_Gruppe['eventActors'] = df_Gruppe['Urheberrecht'].apply(set_value)
+    #df_Gruppe['eventActors'] = df_Gruppe['PROVENIENZ (Stufe Kollektion)'].apply(set_value)
+    df_Gruppe['archivalHistory'] = df_Gruppe['AnmerkungTitel'].apply(set_value)
+
+    # drop duplicates of type "Serie"
+    df_Gruppe = df_Gruppe.drop_duplicates(subset='Gruppe', keep='first', inplace=False)
+
+    # append the level "Serie" to a new dataframe "df_lod"
+    df_lod = df_lod.append(df_Gruppe)
+
     # create a dataframe for the level "Serie" and append it to the dataframe "df_lod"
     # set the levelOfDescription, title and scopeAndContent
-    df_sub['lod'] = df_sub['Serie'].apply(set_level, level=('1Serie'))
-    df_serie = df_sub.loc[df_sub['lod'] == '1Serie']
+    df_sub['lod'] = df_sub['Serie'].apply(set_level, level=('3Serie'))
+    df_serie = df_sub.loc[df_sub['lod'] == '3Serie']
     df_serie['title'] = df_serie['Serie'].apply(set_value)
-    df_serie['scopeAndContent'] = df_serie['scope_Serie'].apply(set_value)
+    #df_serie['scopeAndContent'] = df_serie['scope_Serie'].apply(set_value)
     df_serie['digitalObjectP'] = df_serie['digitalObjectP'].apply(set_value)
     df_serie['hierarchyPath'] = df_serie['hierarchyPathSerie'].apply(set_value)
+    # set the count value as the number of objects at serie level
     df_serie['extentAndMedium'] = df_serie['count'].apply(set_value)
     df_serie['extentAndMedium'] = df_serie['extentAndMedium'].astype(str) + " Objekte"
 
@@ -248,11 +345,11 @@ def main():
     df_serie = df_serie.drop_duplicates(subset='Serie', keep='first', inplace=False)
 
     # append the level "Serie" to a new dataframe "df_lod"
-    df_lod = df_serie
+    df_lod = df_lod.append(df_serie)
 
     # create a dataframe for the level "Teilserie" and append to "df_lod"
-    df_sub['lod'] = df_sub['Teilserie'].apply(set_level, level=('2Teilserie'))
-    df_teilserie = df_sub.loc[df_sub['lod'] == '2Teilserie']
+    df_sub['lod'] = df_sub['Teilserie'].apply(set_level, level=('4Teilserie'))
+    df_teilserie = df_sub.loc[df_sub['lod'] == '4Teilserie']
     df_teilserie['title'] = df_teilserie['Teilserie'].apply(set_value)
     #TODO: df_teilserie['title'] = df_teilserie['Teilserie'].str.replace('\,.*$','')
     df_teilserie['scopeAndContent'] = df_teilserie['Teilserie'].apply(set_value)
@@ -402,10 +499,10 @@ def main():
     #mydata_final['eventStartDates'] = mydata_final['eventStartDates']
 
     # export data to csv file
-    export_csv = mydata.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export\export_df_all.csv', encoding='utf-8', index = None, header=True)
+    export_csv = mydata.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export2\export_df_all.csv', encoding='utf-8', index = None, header=True)
 
     # export data to csv file
-    export_csv_final = mydata_final.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export\information-objects.csv', encoding='utf-8', index = None, header=True)
+    export_csv_final = mydata_final.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export2\information-objects.csv', encoding='utf-8', index = None, header=True)
 
 
 ### authority records ###
@@ -431,7 +528,7 @@ def main():
     df_author = df_author.dropna(subset=['authorizedFormOfName'])
     print(df_author)
 
-    # teachers
+    # teachers resp. Herstellung
     df_teacher = mydata[['teacher']].drop_duplicates()
     df_teacher['authorizedFormOfName'] = df_teacher
     #df_teacher['datesOfExistence'] = df_teacher['Datierung']
@@ -454,6 +551,7 @@ def main():
     #df_wettbwewerb['authorizedFormOfName'] = df_wettbwewerb['NORM Körperschaft']
     #df_wettbwewerb['actorOccupations'] = "Wettbewerb"
 
+    # school resp. Verlag
     df_school = mydata[['school']].drop_duplicates()
     df_school['authorizedFormOfName'] = df_school['school']
     df_school['actorOccupations'] = "Verlag"
@@ -510,11 +608,11 @@ def main():
     #print(myrelationships_final)
 
     # export data to csv file
-    export_csv_authorities = myauthorities_final.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export\authority-records.csv', encoding='utf-8', index = None, header=True)
+    export_csv_authorities = myauthorities_final.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export2\authority-records.csv', encoding='utf-8', index = None, header=True)
 
-    export_csv_aliases = myaliases_final.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export\authority-records-aliases.csv', encoding='utf-8', index = None, header=True)
+    export_csv_aliases = myaliases_final.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export2\authority-records-aliases.csv', encoding='utf-8', index = None, header=True)
 
-    export_csv_relationships = myrelationships_final.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export\authority-records-relationships.csv', encoding='utf-8', index = None, header=True)
+    export_csv_relationships = myrelationships_final.to_csv (r'D:\mastranelena\Desktop\Pestalozzianum\Glasdias\Export2\authority-records-relationships.csv', encoding='utf-8', index = None, header=True)
 
 
 if __name__ == '__main__':
