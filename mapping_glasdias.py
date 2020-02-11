@@ -115,11 +115,12 @@ def main():
 
     ### HierarchyPath
     data['hierarchyPath'] = "0_" + data['Bestand']
+    data['hierarchyPathBestand'] = data['hierarchyPath']
     data['hierarchyPath'] = data['hierarchyPath'] + "/1_" + data['Teilbestand']
     data['hierarchyPathTeilbestand'] = data['hierarchyPath']
 
     data['hierarchyPath'] = data['hierarchyPath'] + "/2_" + data['Gruppe']
-    data['hierarchyPathSerie'] = data['hierarchyPath']
+    data['hierarchyPathGruppe'] = data['hierarchyPath']
 
     data['hierarchyPath'] = data['hierarchyPath'] + "/3_" + data['Serie']
     data['hierarchyPathSerie'] = data['hierarchyPath']
@@ -238,7 +239,7 @@ def main():
     df_Bestand['title'] = df_Bestand['Bestand'].apply(set_value)
     #df_Bestand['scopeAndContent'] = df_Bestand['scope_Bestand'].apply(set_value)
     df_Bestand['digitalObjectP'] = df_Bestand['digitalObjectP'].apply(set_value)
-    df_Bestand['hierarchyPath'] = df_Bestand['hierarchyPathSerie'].apply(set_value)
+    df_Bestand['hierarchyPath'] = df_Bestand['hierarchyPathBestand']
     # set the count value as the number of objects at group level
     df_Bestand['extentAndMedium'] = df_Bestand['count'].apply(set_value)
     df_Bestand['extentAndMedium'] = df_Bestand['extentAndMedium'].astype(str) + " Objekte"
@@ -267,7 +268,7 @@ def main():
     df_Teilbestand['title'] = df_Teilbestand['Teilbestand'].apply(set_value)
     #df_Teilbestand['scopeAndContent'] = df_Teilbestand['scope_Teilbestand'].apply(set_value)
     df_Teilbestand['digitalObjectP'] = df_Teilbestand['digitalObjectP'].apply(set_value)
-    df_Teilbestand['hierarchyPath'] = df_Teilbestand['hierarchyPathSerie'].apply(set_value)
+    df_Teilbestand['hierarchyPath'] = df_Teilbestand['hierarchyPathTeilbestand']
     # set the count value as the number of objects at group level
     df_Teilbestand['extentAndMedium'] = df_Teilbestand['count'].apply(set_value)
     df_Teilbestand['extentAndMedium'] = df_Teilbestand['extentAndMedium'].astype(str) + " Objekte"
@@ -296,7 +297,7 @@ def main():
     df_Gruppe['title'] = df_Gruppe['Gruppe'].apply(set_value)
     #df_Gruppe['scopeAndContent'] = df_Gruppe['scope_Gruppe'].apply(set_value)
     df_Gruppe['digitalObjectP'] = df_Gruppe['digitalObjectP'].apply(set_value)
-    df_Gruppe['hierarchyPath'] = df_Gruppe['hierarchyPathSerie'].apply(set_value)
+    df_Gruppe['hierarchyPath'] = df_Gruppe['hierarchyPathGruppe'].apply(set_value)
     # set the count value as the number of objects at group level
     df_Gruppe['extentAndMedium'] = df_Gruppe['count'].apply(set_value)
     df_Gruppe['extentAndMedium'] = df_Gruppe['extentAndMedium'].astype(str) + " Objekte"
@@ -325,7 +326,7 @@ def main():
     df_serie['title'] = df_serie['Serie'].apply(set_value)
     #df_serie['scopeAndContent'] = df_serie['scope_Serie'].apply(set_value)
     df_serie['digitalObjectP'] = df_serie['digitalObjectP'].apply(set_value)
-    df_serie['hierarchyPath'] = df_serie['hierarchyPathSerie'].apply(set_value)
+    df_serie['hierarchyPath'] = df_serie['hierarchyPathSerie']
     # set the count value as the number of objects at serie level
     df_serie['extentAndMedium'] = df_serie['count'].apply(set_value)
     df_serie['extentAndMedium'] = df_serie['extentAndMedium'].astype(str) + " Objekte"
@@ -354,7 +355,7 @@ def main():
     #TODO: df_teilserie['title'] = df_teilserie['Teilserie'].str.replace('\,.*$','')
     df_teilserie['scopeAndContent'] = df_teilserie['Teilserie'].apply(set_value)
     df_teilserie['digitalObjectP'] = df_teilserie['digitalObjectP'].apply(set_value)
-    df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPathTeilserie'].apply(set_value)
+    df_teilserie['hierarchyPath'] = df_teilserie['hierarchyPathTeilserie']
     df_teilserie['extentAndMedium'] = df_teilserie['count'].apply(set_value)
     df_teilserie['extentAndMedium'] = df_teilserie['extentAndMedium'].astype(str) + " Objekte"
     #TODO: Prüfen, ob korrekt
@@ -378,10 +379,10 @@ def main():
     #df_akte['eventActors'] = ""
     #df_lod = df_lod.append(df_akte)
 
-    s1 = pd.Series(['0Bestand', 'Bestand', 'Bestand', '0_Bestand'])
-    s2 = pd.Series(['0Teilbestand', 'Teilbestand', 'Bestand/Teilbestand', '0_Bestand/1_Teilbestand'])
-    df_bestand = pd.DataFrame([list(s1), list(s2)], columns =  ["lod", "title", 'digitalObjectP', 'hierarchyPath'], index=[0,0])
-    df_lod = df_lod.append(df_bestand)
+    #s1 = pd.Series(['0Bestand', 'Bestand', 'Bestand', '0_Bestand'])
+    #s2 = pd.Series(['0Teilbestand', 'Teilbestand', 'Bestand/Teilbestand', '0_Bestand/1_Teilbestand'])
+    #df_bestand = pd.DataFrame([list(s1), list(s2)], columns =  ["lod", "title", 'digitalObjectP', 'hierarchyPath'], index=[0,0])
+    #df_lod = df_lod.append(df_bestand)
 
     # final columns
     df_column_names = [
